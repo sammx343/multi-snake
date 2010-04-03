@@ -35,10 +35,6 @@ public abstract class Player {
         return snake;
     }
 
-    public void kill() {
-        score -= 20;
-    }
-
     public int getScore() {
         return score;
     }
@@ -47,9 +43,15 @@ public abstract class Player {
         snake.setDirection(dir);
     }
 
+    // methods for game events, things that can happen to a player
     public void eat() {
         score += 5;
         snake.appendSegment();
+    }
+
+    public void kill() {
+        score -= 20;
+        // FIXME: RESET SNAKE
     }
 
     public void giveKill() {
