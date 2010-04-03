@@ -37,7 +37,7 @@ public class Snake {
         }
     }
 
-    private static int START_SEGMENTS = 4;
+    private static final int START_SEGMENTS = 4;
 
     private LinkedList<Segment> segments;
     private Direction dir;
@@ -61,7 +61,7 @@ public class Snake {
         dir = newDir;
     }
 
-    List<Location> getLocations() {
+    public List<Location> getLocations() {
         LinkedList<Location> locs = new LinkedList<Location>();
         ListIterator<Segment> it = segments.listIterator();
 
@@ -75,7 +75,7 @@ public class Snake {
     }
 
     // if snake crashed into something or just to do initial construction
-    void reset(Location loc) {
+    public void reset(Location loc) {
         segments.clear();
         for(int i = 0; i < START_SEGMENTS; i++)
             segments.add(new Segment(loc));
@@ -83,7 +83,7 @@ public class Snake {
         dir = Direction.NONE;
     }
 
-    void appendSegment() {
+    public void appendSegment() {
         Segment last = segments.getLast();
         Segment newSegment = new Segment(last.getLocation());
         segments.add(newSegment);

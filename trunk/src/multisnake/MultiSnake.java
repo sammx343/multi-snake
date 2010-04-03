@@ -11,6 +11,8 @@ import org.jdesktop.application.SingleFrameApplication;
  * The main class of the application.
  */
 public class MultiSnake extends SingleFrameApplication {
+    public static final int BOARD_WIDTH = 15;
+    public static final int BOARD_HEIGHT = 15;
 
     /**
      * At startup create and show the main frame of the application.
