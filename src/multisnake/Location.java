@@ -34,13 +34,13 @@ public class Location {
     public Location getAdjacentLocation(Direction dir) {
         switch(dir) {
             case NORTH:
-                return new Location(x, y + 1);
+                return new Location(x, y - 1);
             case EAST:
                 return new Location(x + 1, y);
             case SOUTH:
                 return new Location(x, y - 1);
             case WEST:
-                return new Location(x - 1, y);
+                return new Location(x + 1, y);
             case NONE:
             default:
                 return this;
@@ -62,5 +62,9 @@ public class Location {
             assert false : "Getting direction failed.";
             return Direction.NONE;
         }
+    }
+
+    public boolean equals(Location loc2) {
+        return ((loc2.x == x) && (loc2.y == y));
     }
 }
