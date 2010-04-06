@@ -41,13 +41,17 @@ public class Snake {
 
     private LinkedList<Segment> segments;
     private Direction dir;
+    private boolean isDead = false;
 
     public Snake(Location loc) {
+        segments = new LinkedList<Segment>();
+
         reset(loc);
     }
 
     // move snake one spot
     public void tick() {
+        System.out.println("tick");
         Segment firstSegment = segments.getFirst();
         Location firstLoc = firstSegment.getLocation();
         Location newLoc = firstLoc.getAdjacentLocation(dir);
@@ -81,6 +85,8 @@ public class Snake {
             segments.add(new Segment(loc));
 
         dir = Direction.NONE;
+
+        isDead = false;
     }
 
     public void appendSegment() {

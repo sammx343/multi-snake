@@ -94,4 +94,12 @@ public class MultiSnakeView extends FrameView {
     // End of variables declaration//GEN-END:variables
 
     private JDialog aboutBox;
+    private BoardCanvas bc;
+
+    public void initBoardCanvas(BoardCanvas bc) {
+        this.bc = bc;
+
+        mainPanel.add(bc);
+        bc.repaint();
+    }
 }

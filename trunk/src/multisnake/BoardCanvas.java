@@ -29,20 +29,28 @@ import java.util.*;
 public class BoardCanvas extends Canvas {
     LinkedList<Player> players;
 
-    private int scaling = 5;
+    private int scaling = 20;
 
     public BoardCanvas(java.util.List<Player> players) {
         this.players = new LinkedList<Player>(players);
+
+        setSize(scaling * MultiSnake.BOARD_WIDTH,
+                scaling * MultiSnake.BOARD_HEIGHT);
     }
 
-    public void draw(Graphics gf) {
+    @Override
+    public void paint(Graphics gf) {
         int height = getHeight(), width = getWidth();
 
+        System.out.println("paint");
+
         // double buffer
-        Image img = new BufferedImage(MultiSnake.BOARD_WIDTH,
-                                      MultiSnake.BOARD_HEIGHT,
+        Image img = new BufferedImage(scaling * MultiSnake.BOARD_WIDTH,
+                                      scaling * MultiSnake.BOARD_HEIGHT,
                                       BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
+
+        g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
 
         // draw everyone's snakes
         for(Player p : players) {
@@ -58,7 +66,7 @@ public class BoardCanvas extends Canvas {
         g.setColor(c);
 
         for (Location loc : locs) {
-            g.drawRect(scaling * loc.x, scaling * loc.y, scaling, scaling);
+            g.fillRect(scaling * loc.x, scaling * loc.y, scaling, scaling);
         }
     }
 }
