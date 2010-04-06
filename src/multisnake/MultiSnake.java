@@ -6,19 +6,44 @@ package multisnake;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import java.util.LinkedList;
+import javax.swing.*;
 
 /**
  * The main class of the application.
  */
 public class MultiSnake extends SingleFrameApplication {
-    public static final int BOARD_WIDTH = 15;
-    public static final int BOARD_HEIGHT = 15;
+    public static final int BOARD_WIDTH = 30;
+    public static final int BOARD_HEIGHT = 30;
+
+    private Game game;
 
     /**
      * At startup create and show the main frame of the application.
      */
     @Override protected void startup() {
-        show(new MultiSnakeView(this));
+        // MultiSnakeView msv = new MultiSnakeView(this);
+
+        // show(msv);
+        
+        JFrame mainFrame = new JFrame("MultiSnake");
+
+        // FIXME: MULTIPLE PLAYERS
+        KeyboardPlayer player = new KeyboardPlayer();
+        LinkedList<Player> players = new LinkedList<Player>();
+        players.add(player);
+
+        BoardCanvas bc = new BoardCanvas(players);
+        bc.addKeyListener((KeyboardPlayer)players.get(0));
+
+        mainFrame.add(bc);
+        mainFrame.pack();
+        mainFrame.setResizable(false);
+        mainFrame.setVisible(true);
+        game = new Game(players, bc);
+
+        player.initTimer(game);
+        game.runGame();
     }
 
     /**

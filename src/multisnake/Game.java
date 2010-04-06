@@ -27,15 +27,17 @@ import java.util.*;
 public class Game {
     ArrayList<Player> players;
     BoardCanvas bc;
+    // MultiSnakeView msv;
 
-    public Game(List<Player> players) {
+    public Game(List<Player> players, BoardCanvas bc) {
         this.players = new ArrayList<Player>(players);
+        // this.msv = msv;
 
-        bc = new BoardCanvas(this.players);
+        this.bc = bc;
+        // msv.initBoardCanvas(bc);
     }
 
     public void runGame() {
-
     }
 
     public void checkCollisions() {
@@ -45,8 +47,11 @@ public class Game {
             List<Location> locs = snake.getLocations();
             Location head = locs.get(0);
 
-            // and every other snake
+            // snake-on-snake: and every other snake
             for(Player p2 : players) {
+                if (p2 == p1)
+                    continue;
+
                 Snake snake2 = p2.getSnake();
                 List<Location> locs2 = snake.getLocations();
 
@@ -58,6 +63,16 @@ public class Game {
                     }
                 }
             }
+
+            // snake-on-wall:
+            if ((head.x < 0) || (head.x >= MultiSnake.BOARD_WIDTH)
+                || (head.y < 0) || (head.y >= MultiSnake.BOARD_HEIGHT)) {
+                p1.kill();
+            }
         }
+    }
+
+    public BoardCanvas getBoardCanvas() {
+        return bc;
     }
 }

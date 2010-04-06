@@ -38,9 +38,9 @@ public class Location {
             case EAST:
                 return new Location(x + 1, y);
             case SOUTH:
-                return new Location(x, y - 1);
+                return new Location(x, y + 1);
             case WEST:
-                return new Location(x + 1, y);
+                return new Location(x - 1, y);
             case NONE:
             default:
                 return this;
