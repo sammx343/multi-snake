@@ -7,14 +7,15 @@ package multisnake;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import java.util.LinkedList;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 /**
  * The main class of the application.
  */
 public class MultiSnake extends SingleFrameApplication {
-    public static final int BOARD_WIDTH = 30;
-    public static final int BOARD_HEIGHT = 30;
+    public static final int BOARD_WIDTH = 31;
+    public static final int BOARD_HEIGHT = 31;
 
     private Game game;
 
@@ -29,9 +30,20 @@ public class MultiSnake extends SingleFrameApplication {
         JFrame mainFrame = new JFrame("MultiSnake");
 
         // FIXME: MULTIPLE PLAYERS
-        KeyboardPlayer player = new KeyboardPlayer();
+        KeyboardPlayer player1 = new KeyboardPlayer(new Location(8,16),
+                                                   KeyEvent.VK_UP,
+                                                   KeyEvent.VK_RIGHT,
+                                                   KeyEvent.VK_DOWN,
+                                                   KeyEvent.VK_LEFT);
+        KeyboardPlayer player2 = new KeyboardPlayer(new Location(16,8),
+                                                   KeyEvent.VK_W,
+                                                   KeyEvent.VK_D,
+                                                   KeyEvent.VK_S,
+                                                   KeyEvent.VK_A);
+
         LinkedList<Player> players = new LinkedList<Player>();
-        players.add(player);
+        players.add(player1);
+        players.add(player2);
 
         BoardCanvas bc = new BoardCanvas(players);
         bc.addKeyListener((KeyboardPlayer)players.get(0));
@@ -42,7 +54,9 @@ public class MultiSnake extends SingleFrameApplication {
         mainFrame.setVisible(true);
         game = new Game(players, bc);
 
-        player.initTimer(game);
+        for(Player p : players) {
+            p.initTimer(game);
+        }
         game.runGame();
     }
 

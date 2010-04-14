@@ -36,10 +36,9 @@ public abstract class Player {
     // work, so we queue it for destruction
     private boolean isDead = false;
 
-    public Player() {
+    public Player(Location startLoc) {
         // FIXME: REAL LOCATION
-        snake = new Snake(new Location((MultiSnake.BOARD_WIDTH + 1) / 2,
-                                       (MultiSnake.BOARD_HEIGHT + 1) / 2));
+        snake = new Snake(startLoc);
     }
 
     public void initTimer(Game game) {
@@ -52,8 +51,7 @@ public abstract class Player {
         
 
         if (isDead) {
-            snake.reset(new Location((MultiSnake.BOARD_WIDTH + 1) / 2,
-                                     (MultiSnake.BOARD_HEIGHT + 1) / 2));
+            snake.reset();
             isDead = false;
         }
         else
@@ -86,5 +84,9 @@ public abstract class Player {
     public void giveKill() {
         kills += 1;
         score += 30;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 }

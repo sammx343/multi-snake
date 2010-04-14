@@ -26,6 +26,19 @@ import java.awt.event.*;
  * @author poodimoos
  */
 public class KeyboardPlayer extends Player implements KeyListener {
+    private int north, east, south, west;
+
+    public KeyboardPlayer(Location startLoc,
+                          int north, int east, int south, int west) {
+        super(startLoc);
+        
+        this.north = north;
+        this.east = east;
+        this.south = south;
+        this.west = west;
+    }
+
+    // unused methods
     public void keyPressed(KeyEvent e) { }
     public void keyTyped(KeyEvent e) { }
 
