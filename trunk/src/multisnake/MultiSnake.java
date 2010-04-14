@@ -23,11 +23,7 @@ public class MultiSnake extends SingleFrameApplication {
     /**
      * At startup create and show the main frame of the application.
      */
-    @Override protected void startup() {
-        // MultiSnakeView msv = new MultiSnakeView(this);
-
-        // show(msv);
-        
+    @Override protected void startup() {        
         JFrame mainFrame = new JFrame("MultiSnake");
 
         KeyboardPlayer player1 = new KeyboardPlayer(new Location(8,16),
@@ -54,6 +50,7 @@ public class MultiSnake extends SingleFrameApplication {
         }
 
         JTable scoreBoard = new JTable(new ScoreBoardModel(players));
+        scoreBoard.setFocusable(false);
 
         mainFrame.setLayout(new FlowLayout());
         mainFrame.add(bc);
@@ -62,6 +59,8 @@ public class MultiSnake extends SingleFrameApplication {
         mainFrame.setResizable(false);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
+        bc.requestFocusInWindow();
+
         game = new Game(players, bc, scoreBoard);
 
         game.runGame();

@@ -60,6 +60,12 @@ public class Game implements Tickable {
     }
 
     public void checkCollisions() {
+        // Postpone killing players so it doesn't screw with
+        // checking others' collisions, and use sets to ensure we don't give
+        // duplicate kills.
+        Set<Player> deadPlayers = new HashSet<Player>();
+        Set<Player> killingPlayers = new HashSet<Player>();
+
         // for every head
         for(Player p1 : players) {
             Snake snake = p1.getSnake();
@@ -77,8 +83,8 @@ public class Game implements Tickable {
                 // see if the head collides with any part of the other snake
                 for (Location loc : locs2) {
                     if (head.equals(loc)) {
-                        p2.giveKill();
-                        p1.kill();
+                        killingPlayers.add(p2);
+                        deadPlayers.add(p1);
                     }
                 }
             }
@@ -86,8 +92,16 @@ public class Game implements Tickable {
             // snake-on-wall:
             if ((head.x < 0) || (head.x >= MultiSnake.BOARD_WIDTH)
                 || (head.y < 0) || (head.y >= MultiSnake.BOARD_HEIGHT)) {
-                p1.kill();
+                deadPlayers.add(p1);
             }
+        }
+
+        // Kill dead players
+        for(Player dp : deadPlayers) {
+            dp.kill();
+        }
+        for(Player kp : killingPlayers) {
+            kp.giveKill();
         }
     }
 }
