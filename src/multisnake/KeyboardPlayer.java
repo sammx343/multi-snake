@@ -29,8 +29,9 @@ public class KeyboardPlayer extends Player implements KeyListener {
     private int north, east, south, west;
 
     public KeyboardPlayer(Location startLoc,
+                          String name,
                           int north, int east, int south, int west) {
-        super(startLoc);
+        super(startLoc, name);
         
         this.north = north;
         this.east = east;
