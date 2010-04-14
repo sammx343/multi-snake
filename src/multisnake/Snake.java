@@ -40,7 +40,7 @@ public class Snake implements Tickable {
     private static final int START_SEGMENTS = 6;
 
     private LinkedList<Segment> segments;
-    private Direction dir;
+    private Direction dir, tempDir;
     private boolean isDead = false;
     private Location startLoc;
 
@@ -54,6 +54,8 @@ public class Snake implements Tickable {
     // move snake one spot
     public void tick() {
         System.out.println("tick");
+
+        dir = tempDir;
         Segment firstSegment = segments.getFirst();
         Location firstLoc = firstSegment.getLocation();
         Location newLoc = firstLoc.getAdjacentLocation(dir);
@@ -70,7 +72,7 @@ public class Snake implements Tickable {
              || ((dir == Direction.EAST) && (newDir == Direction.WEST))
              || ((dir == Direction.WEST) && (newDir == Direction.EAST)))
             return;
-        dir = newDir;
+        tempDir = newDir;
         System.out.println("set direction to " + dir);
     }
 
@@ -94,6 +96,7 @@ public class Snake implements Tickable {
             segments.add(new Segment(startLoc));
 
         dir = Direction.NONE;
+        tempDir = Direction.NONE;
 
         isDead = false;
     }

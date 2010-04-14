@@ -52,6 +52,7 @@ public class BoardCanvas extends Canvas {
                                       BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
 
+        g.setColor(Color.WHITE);
         g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
 
         // draw everyone's snakes
@@ -70,7 +71,7 @@ public class BoardCanvas extends Canvas {
         g.setColor(c);
 
         for (Location loc : locs) {
-            g.fillRect(scaling * loc.x, scaling * loc.y, scaling, scaling);
+            g.fillRect(scaling * loc.x + 1, scaling * loc.y + 1, scaling - 1, scaling - 1);
         }
     }
 }
