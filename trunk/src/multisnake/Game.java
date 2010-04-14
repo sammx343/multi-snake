@@ -64,7 +64,7 @@ public class Game implements Tickable {
                     continue;
 
                 Snake snake2 = p2.getSnake();
-                List<Location> locs2 = snake.getLocations();
+                List<Location> locs2 = snake2.getLocations();
 
                 // see if the head collides with any part of the other snake
                 for (Location loc : locs2) {
