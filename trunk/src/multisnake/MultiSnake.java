@@ -29,7 +29,6 @@ public class MultiSnake extends SingleFrameApplication {
         
         JFrame mainFrame = new JFrame("MultiSnake");
 
-        // FIXME: MULTIPLE PLAYERS
         KeyboardPlayer player1 = new KeyboardPlayer(new Location(8,16),
                                                    KeyEvent.VK_UP,
                                                    KeyEvent.VK_RIGHT,
