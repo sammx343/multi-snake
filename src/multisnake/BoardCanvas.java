@@ -54,7 +54,7 @@ public class BoardCanvas extends Canvas {
 
         // draw everyone's snakes
         for(Player p : players) {
-            drawSnake(g, p.getSnake(), p.isDead() ? Color.GRAY : Color.BLACK);
+            drawSnake(g, p.getSnake(), Color.BLACK);
         }
 
         gf.drawImage(img, 0, 0, null);

@@ -25,20 +25,13 @@ import java.util.TimerTask;
  * @author poodimoos
  */
 public class TickTask extends TimerTask {
-    Player player;
-    Game game;
-    BoardCanvas bc;
+    Tickable tickable;
 
     public TickTask(Tickable tickable) {
-        this.player = player;
-        this.game = game;
-
-        bc = game.getBoardCanvas();
+        this.tickable = tickable;
     }
 
     public void run() {
-        player.tick();
-        game.checkCollisions();
-        bc.repaint();
+        tickable.tick();
     }
 }

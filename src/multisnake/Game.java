@@ -24,20 +24,31 @@ import java.util.*;
  *
  * @author poodimoos
  */
-public class Game {
+public class Game implements Tickable {
     ArrayList<Player> players;
     BoardCanvas bc;
-    // MultiSnakeView msv;
+    Timer timer;
+    TickTask tickTask;
 
     public Game(List<Player> players, BoardCanvas bc) {
         this.players = new ArrayList<Player>(players);
-        // this.msv = msv;
 
         this.bc = bc;
-        // msv.initBoardCanvas(bc);
+
+        timer = new Timer();
     }
 
     public void runGame() {
+        tickTask = new TickTask(this);
+        timer.scheduleAtFixedRate(tickTask, 0, 300);
+    }
+
+    public void tick() {
+        for(Player p : players) {
+            p.tick();
+        }
+        checkCollisions();
+        bc.repaint();
     }
 
     public void checkCollisions() {
@@ -70,9 +81,5 @@ public class Game {
                 p1.kill();
             }
         }
-    }
-
-    public BoardCanvas getBoardCanvas() {
-        return bc;
     }
 }

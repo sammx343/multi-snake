@@ -24,7 +24,7 @@ import java.util.*;
  *
  * @author poodimoos
  */
-public class Snake {
+public class Snake implements Tickable {
     private class Segment {
         private Location location;
 
@@ -70,6 +70,7 @@ public class Snake {
              || ((dir == Direction.EAST) && (newDir == Direction.WEST))
              || ((dir == Direction.WEST) && (newDir == Direction.EAST)))
             return;
+        System.out.println("set direction to " + newDir);
         dir = newDir;
     }
 
