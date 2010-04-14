@@ -45,19 +45,13 @@ public class KeyboardPlayer extends Player implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         System.out.println("key");
-        switch(key) {
-            case KeyEvent.VK_UP:
-                setDirection(Direction.NORTH);
-                break;
-            case KeyEvent.VK_RIGHT:
-                setDirection(Direction.EAST);
-                break;
-            case KeyEvent.VK_DOWN:
-                setDirection(Direction.SOUTH);
-                break;
-            case KeyEvent.VK_LEFT:
-                setDirection(Direction.WEST);
-                break;
-        }
+        if(key == north)
+            setDirection(Direction.NORTH);
+        else if(key == east)
+            setDirection(Direction.EAST);
+        else if(key == south)
+            setDirection(Direction.SOUTH);
+        else if(key == west)
+            setDirection(Direction.WEST);
     }
 }

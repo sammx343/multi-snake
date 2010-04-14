@@ -18,44 +18,22 @@
 
 package multisnake;
 
-import java.util.Timer;
-
 /**
  *
  * @author poodimoos
  */
-public abstract class Player {
+public abstract class Player implements Tickable {
     private Snake snake;
-
-    private Timer timer;
-    private TickTask tickTask;
 
     private int score;
     private int kills;
-    // we want to wait a tick if the snake dies to make sure collision checks
-    // work, so we queue it for destruction
-    private boolean isDead = false;
 
     public Player(Location startLoc) {
-        // FIXME: REAL LOCATION
         snake = new Snake(startLoc);
     }
 
-    public void initTimer(Game game) {
-        timer = new Timer();
-        tickTask = new TickTask(this, game);
-        timer.scheduleAtFixedRate(tickTask, 0, 300);
-    }
-
     public void tick() {
-        
-
-        if (isDead) {
-            snake.reset();
-            isDead = false;
-        }
-        else
-            snake.tick();
+        snake.tick();
     }
 
     public Snake getSnake() {
@@ -78,15 +56,11 @@ public abstract class Player {
 
     public void kill() {
         score -= 20;
-        isDead = true;
+        snake.reset();
     }
 
     public void giveKill() {
         kills += 1;
         score += 30;
-    }
-
-    public boolean isDead() {
-        return isDead;
     }
 }

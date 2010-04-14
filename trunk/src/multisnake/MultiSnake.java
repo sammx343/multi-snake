@@ -46,7 +46,10 @@ public class MultiSnake extends SingleFrameApplication {
         players.add(player2);
 
         BoardCanvas bc = new BoardCanvas(players);
-        bc.addKeyListener((KeyboardPlayer)players.get(0));
+        for(Player p : players) {
+            KeyboardPlayer kp = (KeyboardPlayer)p;
+            bc.addKeyListener(kp);
+        }
 
         mainFrame.add(bc);
         mainFrame.pack();
@@ -54,9 +57,6 @@ public class MultiSnake extends SingleFrameApplication {
         mainFrame.setVisible(true);
         game = new Game(players, bc);
 
-        for(Player p : players) {
-            p.initTimer(game);
-        }
         game.runGame();
     }
 
