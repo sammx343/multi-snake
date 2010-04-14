@@ -28,8 +28,15 @@ public abstract class Player implements Tickable {
     private int score;
     private int kills;
 
-    public Player(Location startLoc) {
+    private String name;
+
+    public Player(Location startLoc, String name) {
         snake = new Snake(startLoc);
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void tick() {
@@ -42,6 +49,10 @@ public abstract class Player implements Tickable {
 
     public int getScore() {
         return score;
+    }
+
+    public int getKills() {
+        return kills;
     }
 
     protected void setDirection(Direction dir) {

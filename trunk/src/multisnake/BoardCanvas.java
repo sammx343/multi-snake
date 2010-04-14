@@ -56,11 +56,9 @@ public class BoardCanvas extends Canvas {
 
         // draw everyone's snakes
         Iterator<Player> it = players.iterator();
-        int i = 0;
-        while (it.hasNext()) {
+        for(int i = 0; it.hasNext(); i++) {
             Player p = it.next();
             drawSnake(g, p.getSnake(), snakeColors[i]);
-            i++;
         }
 
         gf.drawImage(img, 0, 0, null);

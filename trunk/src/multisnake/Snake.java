@@ -37,7 +37,7 @@ public class Snake implements Tickable {
         }
     }
 
-    private static final int START_SEGMENTS = 4;
+    private static final int START_SEGMENTS = 6;
 
     private LinkedList<Segment> segments;
     private Direction dir;

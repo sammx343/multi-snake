@@ -8,6 +8,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import java.util.LinkedList;
 import java.awt.event.KeyEvent;
+import java.awt.*;
 import javax.swing.*;
 
 /**
@@ -30,15 +31,17 @@ public class MultiSnake extends SingleFrameApplication {
         JFrame mainFrame = new JFrame("MultiSnake");
 
         KeyboardPlayer player1 = new KeyboardPlayer(new Location(8,16),
-                                                   KeyEvent.VK_UP,
-                                                   KeyEvent.VK_RIGHT,
-                                                   KeyEvent.VK_DOWN,
-                                                   KeyEvent.VK_LEFT);
+                                                    "Player 1",
+                                                    KeyEvent.VK_UP,
+                                                    KeyEvent.VK_RIGHT,
+                                                    KeyEvent.VK_DOWN,
+                                                    KeyEvent.VK_LEFT);
         KeyboardPlayer player2 = new KeyboardPlayer(new Location(16,8),
-                                                   KeyEvent.VK_W,
-                                                   KeyEvent.VK_D,
-                                                   KeyEvent.VK_S,
-                                                   KeyEvent.VK_A);
+                                                    "Player 2",
+                                                    KeyEvent.VK_W,
+                                                    KeyEvent.VK_D,
+                                                    KeyEvent.VK_S,
+                                                    KeyEvent.VK_A);
 
         LinkedList<Player> players = new LinkedList<Player>();
         players.add(player1);
@@ -50,11 +53,16 @@ public class MultiSnake extends SingleFrameApplication {
             bc.addKeyListener(kp);
         }
 
+        JTable scoreBoard = new JTable(new ScoreBoardModel(players));
+
+        mainFrame.setLayout(new FlowLayout());
         mainFrame.add(bc);
+        mainFrame.add(scoreBoard);
         mainFrame.pack();
         mainFrame.setResizable(false);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
-        game = new Game(players, bc);
+        game = new Game(players, bc, scoreBoard);
 
         game.runGame();
     }

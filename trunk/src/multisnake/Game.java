@@ -19,28 +19,35 @@
 package multisnake;
 
 import java.util.*;
+import javax.swing.JTable;
 
 /**
  *
  * @author poodimoos
  */
 public class Game implements Tickable {
-    ArrayList<Player> players;
-    BoardCanvas bc;
-    Timer timer;
-    TickTask tickTask;
+    private final ArrayList<Player> players;
+    private BoardCanvas bc;
+    private JTable scoreBoard;
+    private Timer timer;
+    private TickTask tickTask;
 
-    public Game(List<Player> players, BoardCanvas bc) {
+    private static final int TICK_LENGTH = 150;
+
+    public Game(final List<Player> players,
+                BoardCanvas bc,
+                JTable scoreBoard) {
         this.players = new ArrayList<Player>(players);
 
         this.bc = bc;
+        this.scoreBoard = scoreBoard;
 
         timer = new Timer();
     }
 
     public void runGame() {
         tickTask = new TickTask(this);
-        timer.scheduleAtFixedRate(tickTask, 0, 300);
+        timer.scheduleAtFixedRate(tickTask, 0, TICK_LENGTH);
     }
 
     public void tick() {
@@ -49,6 +56,7 @@ public class Game implements Tickable {
         }
         checkCollisions();
         bc.repaint();
+        scoreBoard.repaint();
     }
 
     public void checkCollisions() {
