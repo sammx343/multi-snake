@@ -70,8 +70,8 @@ public class Snake implements Tickable {
              || ((dir == Direction.EAST) && (newDir == Direction.WEST))
              || ((dir == Direction.WEST) && (newDir == Direction.EAST)))
             return;
-        System.out.println("set direction to " + newDir);
         dir = newDir;
+        System.out.println("set direction to " + dir);
     }
 
     public List<Location> getLocations() {
