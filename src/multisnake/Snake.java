@@ -42,11 +42,13 @@ public class Snake {
     private LinkedList<Segment> segments;
     private Direction dir;
     private boolean isDead = false;
+    private Location startLoc;
 
-    public Snake(Location loc) {
+    public Snake(Location startLoc) {
         segments = new LinkedList<Segment>();
 
-        reset(loc);
+        this.startLoc = startLoc;
+        reset();
     }
 
     // move snake one spot
@@ -62,12 +64,18 @@ public class Snake {
     }
 
     public void setDirection(Direction newDir) {
+        // don't allow straight direction reversal
+        if (((dir == Direction.SOUTH) && (newDir == Direction.NORTH))
+             || ((dir == Direction.NORTH) && (newDir == Direction.SOUTH))
+             || ((dir == Direction.EAST) && (newDir == Direction.WEST))
+             || ((dir == Direction.WEST) && (newDir == Direction.EAST)))
+            return;
         dir = newDir;
     }
 
     public List<Location> getLocations() {
         LinkedList<Location> locs = new LinkedList<Location>();
-        ListIterator<Segment> it = segments.listIterator();
+        Iterator<Segment> it = segments.iterator();
 
         while(it.hasNext()) {
             Segment seg = it.next();
@@ -79,10 +87,10 @@ public class Snake {
     }
 
     // if snake crashed into something or just to do initial construction
-    public void reset(Location loc) {
+    public void reset() {
         segments.clear();
         for(int i = 0; i < START_SEGMENTS; i++)
-            segments.add(new Segment(loc));
+            segments.add(new Segment(startLoc));
 
         dir = Direction.NONE;
 

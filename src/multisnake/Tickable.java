@@ -18,27 +18,10 @@
 
 package multisnake;
 
-import java.util.TimerTask;
-
 /**
  *
  * @author poodimoos
  */
-public class TickTask extends TimerTask {
-    Player player;
-    Game game;
-    BoardCanvas bc;
-
-    public TickTask(Tickable tickable) {
-        this.player = player;
-        this.game = game;
-
-        bc = game.getBoardCanvas();
-    }
-
-    public void run() {
-        player.tick();
-        game.checkCollisions();
-        bc.repaint();
-    }
+public interface Tickable {
+    public void tick();
 }
