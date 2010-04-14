@@ -49,11 +49,13 @@ public class BoardCanvas extends Canvas {
         // double buffer
         Image img = new BufferedImage(scaling * MultiSnake.BOARD_WIDTH,
                                       scaling * MultiSnake.BOARD_HEIGHT,
-                                      BufferedImage.TYPE_INT_RGB);
+                                      BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
 
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
+        //g.setColor(Color.WHITE);
+        //g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
+        g.setColor(Color.BLACK);
+        g.drawRect(0, 0, img.getWidth(null) - 1, img.getHeight(null) - 1);
 
         // draw everyone's snakes
         Iterator<Player> it = players.iterator();
