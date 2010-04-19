@@ -50,19 +50,22 @@ public class Location implements Serializable {
     }
 
     public Direction getDirectionTo(Location loc) {
+        if((loc == null) || equals(loc))
+            return Direction.NONE;
+
         double angle = Math.atan2(loc.y - y, loc.x - x);
 
-        if((angle > 7 * Math.PI / 4) || (angle <= Math.PI / 4))
-            return Direction.EAST;
-        else if ((angle > Math.PI / 4) && (angle <= 3 * Math.PI / 4))
-            return Direction.NORTH;
-        else if ((angle > 3 * Math.PI / 4) && (angle <= 5 * Math.PI / 4))
+        if((angle > 3 * Math.PI / 4) || (angle <= -3 * Math.PI / 4))
             return Direction.WEST;
-        else if ((angle > 5 * Math.PI / 4) && (angle <= 7 * Math.PI / 4))
+        else if ((angle > -3 * Math.PI / 4) && (angle <= -1 * Math.PI / 4))
             return Direction.SOUTH;
+        else if ((angle > -1 * Math.PI / 4) && (angle <= 1 * Math.PI / 4))
+            return Direction.EAST;
+        else if ((angle > 1 * Math.PI / 4) && (angle <= 3 * Math.PI / 4))
+            return Direction.NORTH;
         else {
             assert false : "Getting direction failed.";
-            return Direction.NONE;
+            return null;
         }
     }
 

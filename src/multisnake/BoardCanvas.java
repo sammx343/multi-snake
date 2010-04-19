@@ -38,16 +38,15 @@ public class BoardCanvas extends Canvas {
     List<Player> players;
     List<Pickup> pickups;
 
-    private int scaling = 50;
-
-    private static Color[] snakeColors = {Color.RED, Color.BLUE, Color.GREEN};
+    private static final int SCALING = 25;
+    private static final Color[] snakeColors = {Color.RED, Color.BLUE, Color.GREEN};
 
     public BoardCanvas() {
         players = new LinkedList<Player>();
         pickups = new LinkedList<Pickup>();
 
-        setSize(scaling * MultiSnake.BOARD_WIDTH,
-                scaling * MultiSnake.BOARD_HEIGHT);
+        setSize(SCALING * MultiSnake.BOARD_WIDTH,
+                SCALING * MultiSnake.BOARD_HEIGHT);
     }
 
     public void initForGame(List<Player> players,
@@ -60,11 +59,9 @@ public class BoardCanvas extends Canvas {
     public void update(Graphics gf) {
         int height = getHeight(), width = getWidth();
 
-        System.out.println("paint");
-
         // double buffer
-        Image img = new BufferedImage(scaling * MultiSnake.BOARD_WIDTH,
-                                      scaling * MultiSnake.BOARD_HEIGHT,
+        Image img = new BufferedImage(SCALING * MultiSnake.BOARD_WIDTH,
+                                      SCALING * MultiSnake.BOARD_HEIGHT,
                                       BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D)img.getGraphics();
 
@@ -94,8 +91,7 @@ public class BoardCanvas extends Canvas {
     private void drawSnake(Graphics g, Snake snake, Color c) {
         List<Location> locs = snake.getLocations();
         Iterator<Location> it = locs.iterator();
-        Location loc, prev;
-        loc = it.next();
+        Location loc = null, prev;
 
         g.setColor(c);
 
@@ -104,24 +100,26 @@ public class BoardCanvas extends Canvas {
             loc = it.next();
             Direction dir = loc.getDirectionTo(prev);
 
-            g.fillRect(scaling * loc.x + 1, scaling * loc.y + 1,
-                       scaling - 1, scaling - 1);
+            g.fillRect(SCALING * loc.x + 1, SCALING * loc.y + 1,
+                       SCALING - 2, SCALING - 2);
 
             switch(dir) {
                 case NORTH:
-                    g.fillRect(scaling * loc.x + 1, scaling * loc.y - 1,
-                               scaling - 2, 2);
+                    g.fillRect(SCALING * loc.x + 1, SCALING * (loc.y + 1) - 1,
+                               SCALING - 2, 2);
                     break;
                 case EAST:
-                    g.drawLine(scaling * loc.x, scaling * loc.y + 1,
-                               scaling * loc.x, scaling * (loc.y + 1) - 1);
-                    break;
-                case WEST:
+                    g.fillRect(SCALING * (loc.x + 1) - 1, SCALING * loc.y + 1,
+                               2, SCALING - 2);
                     break;
                 case SOUTH:
+                    g.fillRect(SCALING * loc.x + 1, SCALING * loc.y - 1,
+                               SCALING - 2, 2);
                     break;
-                default:
-                    assert(false);
+                case WEST:
+                    g.fillRect(SCALING * loc.x - 1, SCALING * loc.y + 1,
+                               2, SCALING - 2);
+                    break;
             }
         }
     }
@@ -129,6 +127,8 @@ public class BoardCanvas extends Canvas {
     private void drawPickup(Graphics g, Pickup pickup) {
         Location loc = pickup.getLocation();
 
-        g.drawImage(pickup.getImage(), scaling * loc.x, scaling * loc.y, null);
+        g.drawImage(pickup.getImage(SCALING),
+                    SCALING * loc.x, SCALING * loc.y,
+                    null);
     }
 }

@@ -46,5 +46,5 @@ public abstract class Pickup {
         return loc;
     }
 
-    public abstract Image getImage();
+    public abstract Image getImage(int size);
 }
