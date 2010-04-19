@@ -42,13 +42,10 @@ public class Snake implements Tickable {
     private LinkedList<Segment> segments;
     private Direction dir, tempDir;
     private boolean isDead = false;
-    private Location startLoc;
 
-    public Snake(Location startLoc) {
+    // Initializes snake without setting up segments, call reset for that
+    public Snake() {
         segments = new LinkedList<Segment>();
-
-        this.startLoc = startLoc;
-        reset();
     }
 
     // move snake one spot
@@ -90,7 +87,7 @@ public class Snake implements Tickable {
     }
 
     // if snake crashed into something or just to do initial construction
-    public void reset() {
+    public void reset(Location startLoc) {
         segments.clear();
         for(int i = 0; i < START_SEGMENTS; i++)
             segments.add(new Segment(startLoc));

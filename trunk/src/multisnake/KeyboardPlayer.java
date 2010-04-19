@@ -28,10 +28,9 @@ import java.awt.event.*;
 public class KeyboardPlayer extends Player implements KeyListener {
     private int north, east, south, west;
 
-    public KeyboardPlayer(Location startLoc,
-                          String name,
+    public KeyboardPlayer(String name,
                           int north, int east, int south, int west) {
-        super(startLoc, name);
+        super(name);
         
         this.north = north;
         this.east = east;
