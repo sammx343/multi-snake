@@ -18,11 +18,13 @@
 
 package multisnake;
 
+import java.io.Serializable;
+
 /**
  *
  * @author poodimoos
  */
-public class Location {
+public class Location implements Serializable {
     public int x;
     public int y;
 

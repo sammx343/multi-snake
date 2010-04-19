@@ -92,11 +92,14 @@ public class Game implements Tickable {
                 List<Location> locs2 = snake2.getLocations();
 
                 // see if the head collides with any part of the other snake
-                for (Location loc : locs2) {
+                Iterator<Location> it = locs2.iterator();
+                Location loc = it.next();
+                for (int i = 0; it.hasNext(); loc = it.next()) {
                     if (head.equals(loc)) {
                         if (p1 != p2)
                             killingPlayers.add(p2);
-                        deadPlayers.add(p1);
+                        if ((p1 != p2) || (i != 0))
+                            deadPlayers.add(p1);
                     }
                 }
             }
