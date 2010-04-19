@@ -23,12 +23,13 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.util.List;
+import java.io.Serializable;
 
 /**
  *
  * @author poodimoos
  */
-public class Food extends Pickup {
+public class Food extends Pickup implements Serializable {
     private static BufferedImage icon;
 
     static {

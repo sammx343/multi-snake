@@ -19,12 +19,13 @@
 package multisnake;
 
 import java.util.*;
+import java.io.Serializable;
 
 /**
  *
  * @author poodimoos
  */
-public class Snake implements Tickable {
+public class Snake implements Tickable, Serializable {
     private class Segment {
         private Location location;
 

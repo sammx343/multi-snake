@@ -36,10 +36,16 @@ public class MultiSnake extends SingleFrameApplication {
                                                     KeyEvent.VK_D,
                                                     KeyEvent.VK_S,
                                                     KeyEvent.VK_A);
+        KeyboardPlayer player3 = new KeyboardPlayer("Player 3",
+                                                    KeyEvent.VK_I,
+                                                    KeyEvent.VK_L,
+                                                    KeyEvent.VK_K,
+                                                    KeyEvent.VK_J);
 
         LinkedList<Player> players = new LinkedList<Player>();
         players.add(player1);
         players.add(player2);
+        players.add(player3);
 
         BoardCanvas bc = new BoardCanvas();
 
