@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Queue;
 
 /**
  *
@@ -91,12 +92,32 @@ public class BoardCanvas extends Canvas {
     }
 
     private void drawSnake(Graphics g, Snake snake, Color c) {
-        java.util.List<Location> locs = snake.getLocations();
+        Queue<Location> locs = (Queue)snake.getLocations();
 
         g.setColor(c);
 
-        for (Location loc : locs) {
-            g.fillRect(scaling * loc.x + 1, scaling * loc.y + 1, scaling - 1, scaling - 1);
+        while(locs.size() > 1) {
+            Location loc = locs.remove();
+            Location locNext = locs.element();
+            Direction dir = loc.getDirectionTo(locNext);
+
+            g.fillRect(scaling * loc.x + 1, scaling * loc.y + 1,
+                       scaling - 1, scaling - 1);
+
+            switch(dir) {
+                case NORTH:
+                    g.drawLine(scaling * loc.x + 1, scaling * loc.y,
+                             scaling * (loc.x + 1) - 1, scaling * loc.y);
+                    break;
+                case EAST:
+                    break;
+                case WEST:
+                    break;
+                case SOUTH:
+                    break;
+                default:
+                    assert(false);
+            }
         }
     }
 
