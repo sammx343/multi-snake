@@ -18,10 +18,11 @@
 
 package multisnake;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
+import java.awt.RenderingHints;
 import java.util.List;
 import java.io.Serializable;
 
@@ -30,21 +31,21 @@ import java.io.Serializable;
  * @author poodimoos
  */
 public class Food extends Pickup implements Serializable {
-    private static BufferedImage icon;
-
-    static {
-        icon = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics g = icon.createGraphics();
-        g.setColor(Color.BLACK);
-        g.fillOval(0, 0, 20, 20);
-    }
-
     public Food(Location loc, List<Pickup> pickups) {
         super(loc, pickups);
     }
 
-    public Image getImage() {
+    public Image getImage(int size) {
+        BufferedImage icon = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g = icon.createGraphics();
+
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                           RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        g.setColor(Color.BLACK);
+        g.fillOval(0, 0, size, size);
+
         return icon;
     }
 

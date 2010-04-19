@@ -43,6 +43,7 @@ public class Snake implements Tickable, Serializable {
     private LinkedList<Segment> segments;
     private Direction dir, tempDir;
     private boolean isDead = false;
+    private int age;
 
     // Initializes snake without setting up segments, call reset for that
     public Snake() {
@@ -51,8 +52,6 @@ public class Snake implements Tickable, Serializable {
 
     // move snake one spot
     public void tick() {
-        System.out.println("tick");
-
         dir = tempDir;
         Segment firstSegment = segments.getFirst();
         Location firstLoc = firstSegment.getLocation();
@@ -61,17 +60,22 @@ public class Snake implements Tickable, Serializable {
 
         segments.removeLast();
         segments.addFirst(newSegment);
+
+        age++;
     }
 
     public void setDirection(Direction newDir) {
         // don't allow straight direction reversal
-        if (((dir == Direction.SOUTH) && (newDir == Direction.NORTH))
-             || ((dir == Direction.NORTH) && (newDir == Direction.SOUTH))
-             || ((dir == Direction.EAST) && (newDir == Direction.WEST))
-             || ((dir == Direction.WEST) && (newDir == Direction.EAST)))
+        // and wait a bit before snakes can move
+        if ((age <= 2)
+            || ((dir == Direction.SOUTH) && (newDir == Direction.NORTH))
+            || ((dir == Direction.NORTH) && (newDir == Direction.SOUTH))
+            || ((dir == Direction.EAST) && (newDir == Direction.WEST))
+            || ((dir == Direction.WEST) && (newDir == Direction.EAST)))
             return;
+
+        // delay changing direction until tick; this means can't turn in on self
         tempDir = newDir;
-        System.out.println("set direction to " + dir);
     }
 
     public List<Location> getLocations() {
@@ -97,6 +101,7 @@ public class Snake implements Tickable, Serializable {
         tempDir = Direction.NONE;
 
         isDead = false;
+        age = 0;
     }
 
     public void appendSegment() {

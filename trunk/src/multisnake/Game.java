@@ -34,7 +34,7 @@ public class Game implements Tickable {
 
     private List<Pickup> pickups;
 
-    private static final int TICK_LENGTH = 300;
+    private static final int TICK_LENGTH = 150;
 
     public Game(final List<Player> players,
                 BoardCanvas bc,
@@ -138,10 +138,16 @@ public class Game implements Tickable {
                 continue;
             List<Location> sLocs = s.getLocations();
             for(Location l : sLocs) {
-                if(loc == sLocs) {
+                if(loc.equals(l)) {
                     return true;
                 }
             }
+        }
+
+        for(Pickup p : pickups) {
+            Location pLoc = p.getLocation();
+            if(loc.equals(pLoc))
+                return true;
         }
 
         return false;
