@@ -38,7 +38,7 @@ public class BoardCanvas extends Canvas {
     List<Player> players;
     List<Pickup> pickups;
 
-    private int scaling = 20;
+    private int scaling = 50;
 
     private static Color[] snakeColors = {Color.RED, Color.BLUE, Color.GREEN};
 
@@ -92,24 +92,29 @@ public class BoardCanvas extends Canvas {
     }
 
     private void drawSnake(Graphics g, Snake snake, Color c) {
-        Queue<Location> locs = (Queue)snake.getLocations();
+        List<Location> locs = snake.getLocations();
+        Iterator<Location> it = locs.iterator();
+        Location loc, prev;
+        loc = it.next();
 
         g.setColor(c);
 
-        while(locs.size() > 1) {
-            Location loc = locs.remove();
-            Location locNext = locs.element();
-            Direction dir = loc.getDirectionTo(locNext);
+        while(it.hasNext()) {
+            prev = loc;
+            loc = it.next();
+            Direction dir = loc.getDirectionTo(prev);
 
             g.fillRect(scaling * loc.x + 1, scaling * loc.y + 1,
                        scaling - 1, scaling - 1);
 
             switch(dir) {
                 case NORTH:
-                    g.drawLine(scaling * loc.x + 1, scaling * loc.y,
-                             scaling * (loc.x + 1) - 1, scaling * loc.y);
+                    g.fillRect(scaling * loc.x + 1, scaling * loc.y - 1,
+                               scaling - 2, 2);
                     break;
                 case EAST:
+                    g.drawLine(scaling * loc.x, scaling * loc.y + 1,
+                               scaling * loc.x, scaling * (loc.y + 1) - 1);
                     break;
                 case WEST:
                     break;

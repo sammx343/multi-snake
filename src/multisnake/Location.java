@@ -50,7 +50,7 @@ public class Location implements Serializable {
     }
 
     public Direction getDirectionTo(Location loc) {
-        double angle = Math.atan2(loc.x - x, loc.y - y);
+        double angle = Math.atan2(loc.y - y, loc.x - x);
 
         if((angle > 7 * Math.PI / 4) || (angle <= Math.PI / 4))
             return Direction.EAST;

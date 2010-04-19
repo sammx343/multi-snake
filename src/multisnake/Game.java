@@ -34,7 +34,7 @@ public class Game implements Tickable {
 
     private List<Pickup> pickups;
 
-    private static final int TICK_LENGTH = 110;
+    private static final int TICK_LENGTH = 300;
 
     public Game(final List<Player> players,
                 BoardCanvas bc,
