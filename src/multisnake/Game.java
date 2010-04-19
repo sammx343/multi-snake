@@ -32,7 +32,9 @@ public class Game implements Tickable {
     private Timer timer;
     private TickTask tickTask;
 
-    private static final int TICK_LENGTH = 150;
+    private List<Pickup> pickups;
+
+    private static final int TICK_LENGTH = 110;
 
     public Game(final List<Player> players,
                 BoardCanvas bc,
@@ -43,11 +45,23 @@ public class Game implements Tickable {
         this.scoreBoard = scoreBoard;
 
         timer = new Timer();
+        pickups = new LinkedList<Pickup>();
     }
 
     public void runGame() {
+        for(Player p : players) {
+            if (p instanceof KeyboardPlayer)
+                bc.addKeyListener((KeyboardPlayer)p);
+
+            p.beginGame(this);
+        }
+
+        bc.initForGame(players, pickups);
+
         tickTask = new TickTask(this);
         timer.scheduleAtFixedRate(tickTask, 0, TICK_LENGTH);
+
+        makeNewFood();
     }
 
     public void tick() {
@@ -74,16 +88,14 @@ public class Game implements Tickable {
 
             // snake-on-snake: and every other snake
             for(Player p2 : players) {
-                if (p2 == p1)
-                    continue;
-
                 Snake snake2 = p2.getSnake();
                 List<Location> locs2 = snake2.getLocations();
 
                 // see if the head collides with any part of the other snake
                 for (Location loc : locs2) {
                     if (head.equals(loc)) {
-                        killingPlayers.add(p2);
+                        if (p1 != p2)
+                            killingPlayers.add(p2);
                         deadPlayers.add(p1);
                     }
                 }
@@ -94,6 +106,12 @@ public class Game implements Tickable {
                 || (head.y < 0) || (head.y >= MultiSnake.BOARD_HEIGHT)) {
                 deadPlayers.add(p1);
             }
+
+            // snake-on-food:
+            for(Pickup pu : pickups) {
+                if (head.equals(pu.getLocation()))
+                    pu.pickedUpBy(p1);
+            }
         }
 
         // Kill dead players
@@ -103,5 +121,36 @@ public class Game implements Tickable {
         for(Player kp : killingPlayers) {
             kp.giveKill();
         }
+    }
+
+    public void makeNewFood() {
+        Food food = new Food(randomValidLocation(), pickups);
+        food.placeOnBoard();
+    }
+
+    public boolean isOccupied(Location loc) {
+        for(Player p : players) {
+            Snake s = p.getSnake();
+            if(s == null)
+                continue;
+            List<Location> sLocs = s.getLocations();
+            for(Location l : sLocs) {
+                if(loc == sLocs) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public Location randomValidLocation() {
+        Location loc;
+        
+        do {
+            loc = Location.getRandomLocation();
+        } while(isOccupied(loc));
+
+        return loc;
     }
 }

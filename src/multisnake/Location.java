@@ -67,4 +67,10 @@ public class Location {
     public boolean equals(Location loc2) {
         return ((loc2.x == x) && (loc2.y == y));
     }
+
+    public static Location getRandomLocation() {
+        int x = (int)(Math.random() * MultiSnake.BOARD_WIDTH);
+        int y = (int)(Math.random() * MultiSnake.BOARD_HEIGHT);
+        return new Location(x, y);
+    }
 }

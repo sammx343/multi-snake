@@ -26,14 +26,12 @@ public class MultiSnake extends SingleFrameApplication {
     @Override protected void startup() {        
         JFrame mainFrame = new JFrame("MultiSnake");
 
-        KeyboardPlayer player1 = new KeyboardPlayer(new Location(8,16),
-                                                    "Player 1",
+        KeyboardPlayer player1 = new KeyboardPlayer("Player 1",
                                                     KeyEvent.VK_UP,
                                                     KeyEvent.VK_RIGHT,
                                                     KeyEvent.VK_DOWN,
                                                     KeyEvent.VK_LEFT);
-        KeyboardPlayer player2 = new KeyboardPlayer(new Location(16,8),
-                                                    "Player 2",
+        KeyboardPlayer player2 = new KeyboardPlayer("Player 2",
                                                     KeyEvent.VK_W,
                                                     KeyEvent.VK_D,
                                                     KeyEvent.VK_S,
@@ -43,18 +41,20 @@ public class MultiSnake extends SingleFrameApplication {
         players.add(player1);
         players.add(player2);
 
-        BoardCanvas bc = new BoardCanvas(players);
-        for(Player p : players) {
-            KeyboardPlayer kp = (KeyboardPlayer)p;
-            bc.addKeyListener(kp);
-        }
+        BoardCanvas bc = new BoardCanvas();
 
         JTable scoreBoard = new JTable(new ScoreBoardModel(players));
         scoreBoard.setFocusable(false);
 
         mainFrame.setLayout(new FlowLayout());
         mainFrame.add(bc);
-        mainFrame.add(scoreBoard);
+
+        Container container = new Container();
+        container.setLayout(new BorderLayout());
+        container.add(scoreBoard.getTableHeader(), BorderLayout.PAGE_START);
+        container.add(scoreBoard, BorderLayout.CENTER);
+        mainFrame.add(container);
+
         mainFrame.pack();
         mainFrame.setResizable(false);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

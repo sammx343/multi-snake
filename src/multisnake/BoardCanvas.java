@@ -18,30 +18,45 @@
 
 package multisnake;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Iterator;
 
 /**
  *
  * @author poodimoos
  */
 public class BoardCanvas extends Canvas {
-    LinkedList<Player> players;
+    List<Player> players;
+    List<Pickup> pickups;
 
     private int scaling = 20;
 
     private static Color[] snakeColors = {Color.RED, Color.BLUE, Color.GREEN};
 
-    public BoardCanvas(java.util.List<Player> players) {
-        this.players = new LinkedList<Player>(players);
+    public BoardCanvas() {
+        players = new LinkedList<Player>();
+        pickups = new LinkedList<Pickup>();
 
         setSize(scaling * MultiSnake.BOARD_WIDTH,
                 scaling * MultiSnake.BOARD_HEIGHT);
     }
 
+    public void initForGame(List<Player> players,
+                            List<Pickup> pickups) {
+        this.players = players;
+        this.pickups = pickups;
+    }
+
     @Override
-    public void paint(Graphics gf) {
+    public void update(Graphics gf) {
         int height = getHeight(), width = getWidth();
 
         System.out.println("paint");
@@ -50,10 +65,13 @@ public class BoardCanvas extends Canvas {
         Image img = new BufferedImage(scaling * MultiSnake.BOARD_WIDTH,
                                       scaling * MultiSnake.BOARD_HEIGHT,
                                       BufferedImage.TYPE_INT_ARGB);
-        Graphics g = img.getGraphics();
+        Graphics2D g = (Graphics2D)img.getGraphics();
 
-        //g.setColor(Color.WHITE);
-        //g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                           RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
         g.setColor(Color.BLACK);
         g.drawRect(0, 0, img.getWidth(null) - 1, img.getHeight(null) - 1);
 
@@ -62,6 +80,11 @@ public class BoardCanvas extends Canvas {
         for(int i = 0; it.hasNext(); i++) {
             Player p = it.next();
             drawSnake(g, p.getSnake(), snakeColors[i]);
+        }
+
+        // draw all the pickups
+        for(Pickup pu : pickups) {
+            drawPickup(g, pu);
         }
 
         gf.drawImage(img, 0, 0, null);
@@ -75,5 +98,11 @@ public class BoardCanvas extends Canvas {
         for (Location loc : locs) {
             g.fillRect(scaling * loc.x + 1, scaling * loc.y + 1, scaling - 1, scaling - 1);
         }
+    }
+
+    private void drawPickup(Graphics g, Pickup pickup) {
+        Location loc = pickup.getLocation();
+
+        g.drawImage(pickup.getImage(), scaling * loc.x, scaling * loc.y, null);
     }
 }

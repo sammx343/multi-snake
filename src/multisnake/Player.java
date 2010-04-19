@@ -24,15 +24,21 @@ package multisnake;
  */
 public abstract class Player implements Tickable {
     private Snake snake;
+    private Game game;
 
     private int score;
     private int kills;
 
     private String name;
 
-    public Player(Location startLoc, String name) {
-        snake = new Snake(startLoc);
+    public Player(String name) {
         this.name = name;
+    }
+
+    public void beginGame(Game game) {
+        this.game = game;
+        snake = new Snake();
+        snake.reset(game.randomValidLocation());
     }
 
     public String getName() {
@@ -61,13 +67,14 @@ public abstract class Player implements Tickable {
 
     // methods for game events, things that can happen to a player
     public void eat() {
-        score += 5;
+        score += 10;
         snake.appendSegment();
+        game.makeNewFood();
     }
 
     public void kill() {
         score -= 20;
-        snake.reset();
+        snake.reset(game.randomValidLocation());
     }
 
     public void giveKill() {
