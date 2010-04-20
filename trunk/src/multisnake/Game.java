@@ -34,7 +34,7 @@ public class Game implements Tickable {
 
     private List<Pickup> pickups;
 
-    private static final int TICK_LENGTH = 150;
+    private static final int TICK_LENGTH = 75;
 
     public Game(final List<Player> players,
                 BoardCanvas bc,
@@ -94,13 +94,17 @@ public class Game implements Tickable {
                 // see if the head collides with any part of the other snake
                 Iterator<Location> it = locs2.iterator();
                 Location loc = it.next();
-                for (int i = 0; it.hasNext(); loc = it.next()) {
-                    if (head.equals(loc)) {
-                        if (p1 != p2)
+                for(int i = 0; it.hasNext(); loc = it.next()) {
+                    if(head.equals(loc)) {
+                        if(p1 != p2)
                             killingPlayers.add(p2);
-                        if ((p1 != p2) || (i != 0))
+                        if(p1 != p2)
+                            deadPlayers.add(p1);
+                        else if((snake.getDirection() != Direction.NONE)
+                                && (i != 0))
                             deadPlayers.add(p1);
                     }
+                    i++;
                 }
             }
 

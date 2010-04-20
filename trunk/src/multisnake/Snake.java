@@ -78,6 +78,10 @@ public class Snake implements Tickable, Serializable {
         tempDir = newDir;
     }
 
+    public Direction getDirection() {
+        return tempDir;
+    }
+
     public List<Location> getLocations() {
         LinkedList<Location> locs = new LinkedList<Location>();
         Iterator<Segment> it = segments.iterator();

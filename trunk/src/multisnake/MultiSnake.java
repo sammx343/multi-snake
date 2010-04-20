@@ -15,8 +15,8 @@ import javax.swing.*;
  * The main class of the application.
  */
 public class MultiSnake extends SingleFrameApplication {
-    public static final int BOARD_WIDTH = 17;
-    public static final int BOARD_HEIGHT = 17;
+    public static final int BOARD_WIDTH = 21;
+    public static final int BOARD_HEIGHT = 21;
 
     private Game game;
 
