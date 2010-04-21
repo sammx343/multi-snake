@@ -18,11 +18,13 @@
 
 package multisnake;
 
+import java.io.Serializable;
+
 /**
  *
  * @author poodimoos
  */
-public abstract class Player implements Tickable {
+public abstract class Player implements Tickable, Serializable {
     private Snake snake;
     private Game game;
 
@@ -63,6 +65,10 @@ public abstract class Player implements Tickable {
 
     protected void setDirection(Direction dir) {
         snake.setDirection(dir);
+    }
+
+    protected Game getGame() {
+        return game;
     }
 
     // methods for game events, things that can happen to a player
