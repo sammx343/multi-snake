@@ -26,4 +26,11 @@ import java.util.List;
  * @author phulin10
  */
 public class TickPacket implements Serializable {
+    private List<Player> players;
+    private List<Pickup> pickups;
+
+    public TickPacket(List<Player> players, List<Pickup> pickups) {
+        this.players = players;
+        this.pickups = pickups;
+    }
 }

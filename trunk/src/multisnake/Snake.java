@@ -65,6 +65,10 @@ public class Snake implements Tickable, Serializable {
     }
 
     public void setDirection(Direction newDir) {
+        // passing null should not change direction
+        if(newDir == null)
+            return;
+
         // don't allow straight direction reversal
         // and wait a bit before snakes can move
         if ((age <= 2)

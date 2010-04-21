@@ -166,4 +166,12 @@ public class Game implements Tickable {
 
         return loc;
     }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Pickup> getPickups() {
+        return pickups;
+    }
 }
