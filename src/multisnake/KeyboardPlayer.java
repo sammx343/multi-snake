@@ -28,6 +28,15 @@ import java.awt.event.*;
 public class KeyboardPlayer extends Player implements KeyListener {
     private int north, east, south, west;
 
+    public KeyboardPlayer() {
+        super();
+
+        north = KeyEvent.VK_UP;
+        east = KeyEvent.VK_RIGHT;
+        south = KeyEvent.VK_DOWN;
+        west = KeyEvent.VK_LEFT;
+    }
+
     public KeyboardPlayer(String name,
                           int north, int east, int south, int west) {
         super(name);

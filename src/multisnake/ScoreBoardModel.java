@@ -20,6 +20,7 @@ package multisnake;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
+import java.util.LinkedList;
 
 /**
  *
@@ -29,6 +30,10 @@ public class ScoreBoardModel extends AbstractTableModel {
     private List<Player> players;
 
     private static final String[] COLUMN_NAMES = {"Player", "Score", "Kills"};
+
+    public ScoreBoardModel() {
+        this.players = new LinkedList<Player>();
+    }
 
     public ScoreBoardModel(List<Player> players) {
         this.players = players;
@@ -47,7 +52,7 @@ public class ScoreBoardModel extends AbstractTableModel {
             return String.valueOf(p.getKills());
         }
 
-        assert(false);
+        assert false : "Too many columns.";
         return null;
     }
 
@@ -66,5 +71,9 @@ public class ScoreBoardModel extends AbstractTableModel {
 
     public String getColumnName(int col) {
         return COLUMN_NAMES[col];
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }
