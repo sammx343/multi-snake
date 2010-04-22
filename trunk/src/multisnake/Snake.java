@@ -26,45 +26,30 @@ import java.io.Serializable;
  * @author poodimoos
  */
 public class Snake implements Tickable, Serializable {
-    private class Segment {
-        private Location location;
-
-        public Segment(Location loc) {
-            location = loc;
-        }
-
-        public Location getLocation() {
-            return location;
-        }
-    }
-
     private static final int START_SEGMENTS = 6;
 
-    private LinkedList<Segment> segments;
+    private LinkedList<Location> segments;
     private Direction dir, tempDir;
-    private boolean isDead = false;
     private int age;
 
     // Initializes snake without setting up segments, call reset for that
     public Snake() {
-        segments = new LinkedList<Segment>();
+        segments = new LinkedList<Location>();
     }
 
     // move snake one spot
-    public void tick() {
+    public synchronized void tick() {
         dir = tempDir;
-        Segment firstSegment = segments.getFirst();
-        Location firstLoc = firstSegment.getLocation();
+        Location firstLoc = segments.getFirst();
         Location newLoc = firstLoc.getAdjacentLocation(dir);
-        Segment newSegment = new Segment(newLoc);
 
         segments.removeLast();
-        segments.addFirst(newSegment);
+        segments.addFirst(newLoc);
 
         age++;
     }
 
-    public void setDirection(Direction newDir) {
+    public synchronized void setDirection(Direction newDir) {
         // passing null should not change direction
         if(newDir == null)
             return;
@@ -82,39 +67,28 @@ public class Snake implements Tickable, Serializable {
         tempDir = newDir;
     }
 
-    public Direction getDirection() {
+    public synchronized Direction getDirection() {
         return tempDir;
     }
 
-    public List<Location> getLocations() {
-        LinkedList<Location> locs = new LinkedList<Location>();
-        Iterator<Segment> it = segments.iterator();
-
-        while(it.hasNext()) {
-            Segment seg = it.next();
-
-            locs.add(seg.getLocation());
-        }
-
-        return locs;
+    public final List<Location> getLocations() {
+        return new LinkedList<Location>(segments);
     }
 
     // if snake crashed into something or just to do initial construction
-    public void reset(Location startLoc) {
+    public synchronized void reset(Location startLoc) {
         segments.clear();
         for(int i = 0; i < START_SEGMENTS; i++)
-            segments.add(new Segment(startLoc));
+            segments.add(startLoc);
 
         dir = Direction.NONE;
         tempDir = Direction.NONE;
 
-        isDead = false;
         age = 0;
     }
 
-    public void appendSegment() {
-        Segment last = segments.getLast();
-        Segment newSegment = new Segment(last.getLocation());
-        segments.add(newSegment);
+    public synchronized void appendSegment() {
+        Location last = segments.getLast();
+        segments.add(last);
     }
 }

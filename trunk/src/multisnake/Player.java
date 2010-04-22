@@ -18,13 +18,16 @@
 
 package multisnake;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.ObjectOutput;
+import java.io.ObjectInput;
+import java.io.IOException;
 
 /**
  *
  * @author poodimoos
  */
-public abstract class Player implements Tickable, Serializable {
+public abstract class Player implements Tickable, Externalizable {
     private Snake snake;
     private Game game;
 
@@ -32,6 +35,10 @@ public abstract class Player implements Tickable, Serializable {
     private int kills;
 
     private String name;
+
+    public Player() {
+        name = "";
+    }
 
     public Player(String name) {
         this.name = name;
@@ -63,6 +70,11 @@ public abstract class Player implements Tickable, Serializable {
         return kills;
     }
 
+    // overridden by subclasses
+    public boolean isReady() {
+        return (snake != null);
+    }
+
     protected void setDirection(Direction dir) {
         snake.setDirection(dir);
     }
@@ -86,5 +98,31 @@ public abstract class Player implements Tickable, Serializable {
     public void giveKill() {
         kills += 1;
         score += 30;
+    }
+
+    // methods for serialization
+    public void writeExternal(ObjectOutput out) {
+        try {
+            out.writeObject(snake);
+            out.writeObject(name);
+            out.writeObject(new Integer(score));
+            out.writeObject(new Integer(kills));
+            out.flush();
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void readExternal(ObjectInput in) {
+        try {
+            snake = (Snake)(in.readObject());
+            name = (String)(in.readObject());
+            Integer scoreI = (Integer)(in.readObject());
+            score = scoreI.intValue();
+            Integer killsI = (Integer)(in.readObject());
+            kills = killsI.intValue();
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -25,8 +25,8 @@ import java.io.Serializable;
  * @author poodimoos
  */
 public class Location implements Serializable {
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
 
     public Location(int x, int y) {
         this.x = x;

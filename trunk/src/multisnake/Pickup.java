@@ -20,14 +20,21 @@ package multisnake;
 
 import java.awt.Image;
 import java.util.List;
+import java.io.Externalizable;
+import java.io.ObjectOutput;
+import java.io.ObjectInput;
+import java.io.IOException;
 
 /**
  *
  * @author poodimoos
  */
-public abstract class Pickup {
+public abstract class Pickup implements Externalizable {
     private Location loc;
     private List<Pickup> pickups;
+
+    // this seems to be needed for serialization... i could be very profane here
+    public Pickup() { }
 
     public Pickup(Location loc, List<Pickup> pickups) {
         this.loc = loc;
@@ -39,7 +46,8 @@ public abstract class Pickup {
     }
 
     public void pickedUpBy(Player player) {
-        pickups.remove(this);
+        if (pickups != null)
+            pickups.remove(this);
     }
 
     public Location getLocation() {
@@ -47,4 +55,20 @@ public abstract class Pickup {
     }
 
     public abstract Image getImage(int size);
+
+    public void writeExternal(ObjectOutput out) {
+        try {
+            out.writeObject(loc);
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void readExternal(ObjectInput in) {
+        try {
+            loc = (Location)(in.readObject());
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

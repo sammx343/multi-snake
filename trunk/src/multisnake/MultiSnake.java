@@ -4,8 +4,6 @@
 
 package multisnake;
 
-import org.jdesktop.application.Application;
-import org.jdesktop.application.SingleFrameApplication;
 import java.util.LinkedList;
 import java.awt.event.KeyEvent;
 import java.awt.*;
@@ -14,16 +12,68 @@ import javax.swing.*;
 /**
  * The main class of the application.
  */
-public class MultiSnake extends SingleFrameApplication {
+public class MultiSnake{
     public static final int BOARD_WIDTH = 21;
     public static final int BOARD_HEIGHT = 21;
 
-    private Game game;
+    public static void main(String[] args) {
+        boolean clientMode = false;
+        String host = "";
+        int port = -1;
 
-    /**
-     * At startup create and show the main frame of the application.
-     */
-    @Override protected void startup() {        
+        for(String s : args) {
+            if(s.startsWith("--server=")) {
+                clientMode = true;
+                host = s.substring(9);
+            }
+            if(s.startsWith("--port=")) {
+                Integer portI = new Integer(s.substring(7));
+                port = portI.intValue();
+            }
+        }
+
+        if(!clientMode)
+            serverRun();
+        else
+            clientRun(host, port);
+    }
+    
+    public static void clientRun(String host, int port) {
+        if((host.equals("")) || (port == -1)) {
+            System.out.println("Must include host and port in client mode.");
+            System.exit(1);
+        }
+
+        System.out.println("connecting to " + host + " at port " + port);
+
+        JFrame mainFrame = new JFrame("MultiSnake");
+
+        BoardCanvas bc = new BoardCanvas();
+
+        JTable scoreBoard = new JTable(new ScoreBoardModel());
+        scoreBoard.setFocusable(false);
+
+        mainFrame.setLayout(new FlowLayout());
+        mainFrame.add(bc);
+
+        Container container = new Container();
+        container.setLayout(new BorderLayout());
+        container.add(scoreBoard.getTableHeader(), BorderLayout.PAGE_START);
+        container.add(scoreBoard, BorderLayout.CENTER);
+        mainFrame.add(container);
+
+        mainFrame.pack();
+        mainFrame.setResizable(false);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
+        bc.requestFocusInWindow();
+
+        ClientGame clientGame = new ClientGame(bc, scoreBoard);
+
+        clientGame.runGame(host, port);
+    }
+
+    public static void serverRun() {
         JFrame mainFrame = new JFrame("MultiSnake");
 
         KeyboardPlayer player1 = new KeyboardPlayer("Player 1",
@@ -36,12 +86,8 @@ public class MultiSnake extends SingleFrameApplication {
                                                     KeyEvent.VK_D,
                                                     KeyEvent.VK_S,
                                                     KeyEvent.VK_A);
-        KeyboardPlayer player3 = new KeyboardPlayer("Player 3",
-                                                    KeyEvent.VK_I,
-                                                    KeyEvent.VK_L,
-                                                    KeyEvent.VK_K,
-                                                    KeyEvent.VK_J);
-
+        NetworkPlayer player3 = new NetworkPlayer("Player 3",
+                                                  10000);
         LinkedList<Player> players = new LinkedList<Player>();
         players.add(player1);
         players.add(player2);
@@ -67,31 +113,8 @@ public class MultiSnake extends SingleFrameApplication {
         mainFrame.setVisible(true);
         bc.requestFocusInWindow();
 
-        game = new Game(players, bc, scoreBoard);
+        Game game = new Game(players, bc, scoreBoard);
 
         game.runGame();
-    }
-
-    /**
-     * This method is to initialize the specified window by injecting resources.
-     * Windows shown in our application come fully initialized from the GUI
-     * builder, so this additional configuration is not needed.
-     */
-    @Override protected void configureWindow(java.awt.Window root) {
-    }
-
-    /**
-     * A convenient static getter for the application instance.
-     * @return the instance of MultiSnake
-     */
-    public static MultiSnake getApplication() {
-        return Application.getInstance(MultiSnake.class);
-    }
-
-    /**
-     * Main method launching the application.
-     */
-    public static void main(String[] args) {
-        launch(MultiSnake.class, args);
     }
 }

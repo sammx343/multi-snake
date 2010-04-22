@@ -33,4 +33,12 @@ public class TickPacket implements Serializable {
         this.players = players;
         this.pickups = pickups;
     }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Pickup> getPickups() {
+        return pickups;
+    }
 }

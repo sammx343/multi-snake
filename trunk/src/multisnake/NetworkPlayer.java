@@ -23,9 +23,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -40,8 +40,16 @@ public class NetworkPlayer extends Player implements Runnable {
 
     private Thread waitingThread;
 
+    private int port;
+
+    public NetworkPlayer() {
+        super();
+    }
+
     public NetworkPlayer(String name, int port) {
         super(name);
+
+        this.port = port;
 
         try {
             serverSocket = new ServerSocket(port);
@@ -49,18 +57,33 @@ public class NetworkPlayer extends Player implements Runnable {
             System.out.println(ex);
         }
     }
+
+    @Override
+    public boolean isReady() {
+        return (outputStream != null);
+    }
     
     public void waitForConnection() {
         try {
+            System.out.println("waiting for connection at port " + port);
+
             socket = serverSocket.accept();
 
             inputStream = new ObjectInputStream(socket.getInputStream());
             outputStream = new ObjectOutputStream(socket.getOutputStream());
+
+            System.out.println(getName() + " connected");
         } catch (IOException ex) {
             System.out.println(ex);
         }
+    }
+
+    @Override
+    public void beginGame(Game game) {
+        super.beginGame(game);
 
         waitingThread = new Thread(this);
+        waitingThread.start();
     }
 
     @Override
@@ -73,14 +96,27 @@ public class NetworkPlayer extends Player implements Runnable {
 
         TickPacket tp = new TickPacket(players, pickups);
 
+        Snake snake = tp.getPlayers().get(0).getSnake();
+        Location head = snake.getLocations().get(0);
+        System.out.println("sent a packet! " + head.x + " " + head.y);
+
         try {
-            outputStream.writeObject(tp);
+            File file = new File("serial.txt");
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream foos = new ObjectOutputStream(fos);
+            foos.writeObject(tp);
+            foos.flush();
+
+            //outputStream.writeObject(tp);
+            //outputStream.flush();
         } catch (IOException ex) {
             System.out.println(ex);
         }
     }
 
     public void run() {
+        waitForConnection();
+
         while(!socket.isClosed()) {
             Direction dir = null;
 

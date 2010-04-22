@@ -30,7 +30,9 @@ import java.io.Serializable;
  *
  * @author poodimoos
  */
-public class Food extends Pickup implements Serializable {
+public class Food extends Pickup {
+    public Food() { super(); }
+
     public Food(Location loc, List<Pickup> pickups) {
         super(loc, pickups);
     }

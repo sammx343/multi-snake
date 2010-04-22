@@ -34,7 +34,7 @@ public class Game implements Tickable {
 
     private List<Pickup> pickups;
 
-    private static final int TICK_LENGTH = 75;
+    private static final int TICK_LENGTH = 1500;
 
     public Game(final List<Player> players,
                 BoardCanvas bc,
@@ -58,13 +58,18 @@ public class Game implements Tickable {
 
         bc.initForGame(players, pickups);
 
+        makeNewFood();
+
         tickTask = new TickTask(this);
         timer.scheduleAtFixedRate(tickTask, 0, TICK_LENGTH);
-
-        makeNewFood();
     }
 
     public void tick() {
+        for(Player p : players) {
+            if (!(p.isReady()))
+                return;
+        }
+
         for(Player p : players) {
             p.tick();
         }

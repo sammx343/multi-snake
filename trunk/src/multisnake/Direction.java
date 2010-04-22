@@ -18,11 +18,13 @@
 
 package multisnake;
 
+import java.io.Serializable;
+
 /**
  *
  * @author poodimoos
  */
-public enum Direction {
+public enum Direction implements Serializable {
     NONE,
     NORTH,
     SOUTH,
