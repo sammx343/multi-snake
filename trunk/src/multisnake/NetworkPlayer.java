@@ -87,9 +87,7 @@ public class NetworkPlayer extends Player implements Runnable {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-
+    public void afterTick() {
         Game game = getGame();
         List<Player> players = game.getPlayers();
         List<Pickup> pickups = game.getPickups();
@@ -101,14 +99,15 @@ public class NetworkPlayer extends Player implements Runnable {
         System.out.println("sent a packet! " + head.x + " " + head.y);
 
         try {
-            File file = new File("serial.txt");
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream foos = new ObjectOutputStream(fos);
-            foos.writeObject(tp);
-            foos.flush();
+            //File file = new File("serial.txt");
+            //FileOutputStream fos = new FileOutputStream(file);
+            //ObjectOutputStream foos = new ObjectOutputStream(fos);
+            //foos.writeObject(tp);
+            //foos.flush();
 
-            //outputStream.writeObject(tp);
-            //outputStream.flush();
+            outputStream.reset();
+            outputStream.writeObject(tp);
+            outputStream.flush();
         } catch (IOException ex) {
             System.out.println(ex);
         }

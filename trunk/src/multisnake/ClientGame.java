@@ -67,17 +67,15 @@ public class ClientGame implements Runnable, KeyListener {
     }
 
     public void run() {
-        ScoreBoardModel sbm = (ScoreBoardModel)(scoreBoard.getModel());
-
         while(!socket.isClosed()) {
             TickPacket tp = null;
 
             try {
-                File file = new File("serial.txt");
+                /*File file = new File("serial.txt");
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream fois = new ObjectInputStream(fis);
-                tp = (TickPacket)(fois.readObject());
-                //tp = (TickPacket)(inputStream.readObject());
+                tp = (TickPacket)(fois.readObject());*/
+                tp = (TickPacket)(inputStream.readObject());
 
                 List<Player> players = tp.getPlayers();
                 List<Pickup> pickups = tp.getPickups();
@@ -87,7 +85,7 @@ public class ClientGame implements Runnable, KeyListener {
                 System.out.println("got a packet! " + head.x + " " + head.y);
 
                 bc.initForGame(players, pickups);
-                sbm.setPlayers(players);
+                scoreBoard.setModel(new ScoreBoardModel(players));
                 bc.repaint();
                 scoreBoard.repaint();
             } catch (Exception ex) {

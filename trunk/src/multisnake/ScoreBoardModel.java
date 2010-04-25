@@ -72,8 +72,4 @@ public class ScoreBoardModel extends AbstractTableModel {
     public String getColumnName(int col) {
         return COLUMN_NAMES[col];
     }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
 }
