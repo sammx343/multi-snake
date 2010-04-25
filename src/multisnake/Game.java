@@ -34,7 +34,7 @@ public class Game implements Tickable {
 
     private List<Pickup> pickups;
 
-    private static final int TICK_LENGTH = 1500;
+    private static final int TICK_LENGTH = 100;
 
     public Game(final List<Player> players,
                 BoardCanvas bc,
@@ -74,6 +74,9 @@ public class Game implements Tickable {
             p.tick();
         }
         checkCollisions();
+        for(Player p : players) {
+            p.afterTick();
+        }
         bc.repaint();
         scoreBoard.repaint();
     }

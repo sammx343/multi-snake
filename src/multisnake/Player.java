@@ -58,6 +58,9 @@ public abstract class Player implements Tickable, Externalizable {
         snake.tick();
     }
 
+    // Some kinds of players may need to do things after ticking
+    public void afterTick() { }
+
     public Snake getSnake() {
         return snake;
     }
