@@ -53,7 +53,7 @@ public class KeyboardPlayer extends Player implements KeyListener {
 
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        System.out.println("key");
+
         if(key == north)
             setDirection(Direction.NORTH);
         else if(key == east)

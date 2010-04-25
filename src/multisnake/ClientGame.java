@@ -24,9 +24,8 @@ import java.util.List;
 import java.net.Socket;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import java.awt.event.KeyListener;
 
 /**
@@ -56,7 +55,7 @@ public class ClientGame implements Runnable, KeyListener {
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
         } catch(IOException ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             System.exit(1);
         }
 
@@ -82,12 +81,14 @@ public class ClientGame implements Runnable, KeyListener {
 
                 Snake snake = players.get(0).getSnake();
                 Location head = snake.getLocations().get(0);
-                System.out.println("got a packet! " + head.x + " " + head.y);
+                //System.out.println("got a packet! " + head.x + " " + head.y);
 
                 bc.initForGame(players, pickups);
-                scoreBoard.setModel(new ScoreBoardModel(players));
                 bc.repaint();
-                scoreBoard.repaint();
+
+                ScoreBoardModel nsbm = new ScoreBoardModel(players);
+                ScoreBoardUpdate sbu = new ScoreBoardUpdate(scoreBoard, nsbm);
+                SwingUtilities.invokeLater(sbu);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -96,7 +97,7 @@ public class ClientGame implements Runnable, KeyListener {
 
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        System.out.println("key");
+
         if(key == KeyEvent.VK_UP)
             setDirection(Direction.NORTH);
         else if(key == KeyEvent.VK_RIGHT)
@@ -112,7 +113,7 @@ public class ClientGame implements Runnable, KeyListener {
             outputStream.writeObject(dir);
             outputStream.flush();
         } catch(Exception ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
