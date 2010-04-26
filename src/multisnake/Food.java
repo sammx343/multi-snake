@@ -31,6 +31,8 @@ import java.io.Serializable;
  * @author poodimoos
  */
 public class Food extends Pickup {
+    private static final long serialVersionUID = 6001;
+
     public Food() { super(); }
 
     public Food(Location loc, List<Pickup> pickups) {

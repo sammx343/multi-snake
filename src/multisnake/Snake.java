@@ -35,6 +35,8 @@ public class Snake implements Tickable, Externalizable {
     private Direction dir, tempDir;
     private int age;
 
+    private static final long serialVersionUID = 2001;
+
     // Initializes snake without setting up segments, call reset for that
     public Snake() {
         segments = Collections.synchronizedList(new LinkedList<Location>());

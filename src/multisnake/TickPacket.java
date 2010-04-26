@@ -29,6 +29,8 @@ public class TickPacket implements Serializable {
     private List<Player> players;
     private List<Pickup> pickups;
 
+    private static final long serialVersionUID = 9001;
+
     public TickPacket(List<Player> players, List<Pickup> pickups) {
         this.players = players;
         this.pickups = pickups;

@@ -70,10 +70,6 @@ public class ClientGame implements Runnable, KeyListener {
             TickPacket tp = null;
 
             try {
-                /*File file = new File("serial.txt");
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream fois = new ObjectInputStream(fis);
-                tp = (TickPacket)(fois.readObject());*/
                 tp = (TickPacket)(inputStream.readObject());
 
                 List<Player> players = tp.getPlayers();

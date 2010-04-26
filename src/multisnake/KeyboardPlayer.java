@@ -28,6 +28,8 @@ import java.awt.event.KeyListener;
 public class KeyboardPlayer extends Player implements KeyListener {
     transient private int north, east, south, west;
 
+    private static final long serialVersionUID = 4001;
+
     public KeyboardPlayer() {
         super();
 

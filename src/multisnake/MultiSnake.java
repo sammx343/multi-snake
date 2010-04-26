@@ -140,11 +140,11 @@ public class MultiSnake{
                                                     KeyEvent.VK_DOWN,
                                                     KeyEvent.VK_LEFT);
         NetworkPlayer player2 = new NetworkPlayer("Player 2", 10000);
-        NetworkPlayer player3 = new NetworkPlayer("Player 3", 10001);
+        //NetworkPlayer player3 = new NetworkPlayer("Player 3", 10001);
         LinkedList<Player> players = new LinkedList<Player>();
         players.add(player1);
         players.add(player2);
-        players.add(player3);
+        //players.add(player3);
 
         BoardCanvas bc = new BoardCanvas();
 

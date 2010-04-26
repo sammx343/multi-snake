@@ -40,6 +40,8 @@ public class NetworkPlayer extends Player implements Runnable {
 
     transient private int port;
 
+    private static final long serialVersionUID = 3001;
+
     public NetworkPlayer() {
         super();
     }

@@ -28,6 +28,8 @@ public class Location implements Serializable {
     public final int x;
     public final int y;
 
+    private static final long serialVersionUID = 8001;
+
     public Location(int x, int y) {
         this.x = x;
         this.y = y;
