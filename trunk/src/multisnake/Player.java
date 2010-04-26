@@ -94,7 +94,7 @@ public abstract class Player implements Tickable, Externalizable {
     }
 
     public void kill() {
-        score -= 20;
+        score -= 10;
         snake.reset(game.randomValidLocation());
     }
 

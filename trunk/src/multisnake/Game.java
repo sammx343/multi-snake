@@ -20,6 +20,7 @@ package multisnake;
 
 import java.util.*;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -203,8 +204,9 @@ public class Game implements Tickable {
 
     public synchronized void removePlayer(Player player) {
         players.remove(player);
-
-        scoreBoard.repaint();
+        ScoreBoardModel sbm = new ScoreBoardModel(players);
+        ScoreBoardUpdate sbu = new ScoreBoardUpdate(scoreBoard, sbm);
+        SwingUtilities.invokeLater(sbu);
         bc.repaint();
     }
 }
