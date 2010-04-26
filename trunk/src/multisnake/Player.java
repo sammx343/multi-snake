@@ -36,6 +36,8 @@ public abstract class Player implements Tickable, Externalizable {
 
     private String name;
 
+    private static final long serialVersionUID = 1001;
+
     public Player() {
         name = "";
     }
@@ -117,7 +119,7 @@ public abstract class Player implements Tickable, Externalizable {
              Integer scoreI = new Integer(score);
              out.writeObject(scoreI);
              Integer killsI = new Integer(kills);
-             out.write(killsI);
+             out.writeObject(killsI);
              out.flush();
          } catch(IOException ex) {
              ex.printStackTrace();
@@ -128,8 +130,10 @@ public abstract class Player implements Tickable, Externalizable {
          try {
              snake = (Snake)(in.readObject());
              name = (String)(in.readObject());
-             score = in.read();
-             kills = in.read();
+             Integer scoreI = (Integer)(in.readObject());
+             score = scoreI.intValue();
+             Integer killsI = (Integer)(in.readObject());
+             kills = killsI.intValue();
          } catch(Exception ex) {
              ex.printStackTrace();
          }

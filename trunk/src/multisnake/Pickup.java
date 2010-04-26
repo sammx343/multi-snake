@@ -33,6 +33,8 @@ public abstract class Pickup implements Externalizable {
     private Location loc;
     private List<Pickup> pickups;
 
+    private static final long serialVersionUID = 5001;
+
     // this seems to be needed for serialization... i could be very profane here
     public Pickup() { }
 

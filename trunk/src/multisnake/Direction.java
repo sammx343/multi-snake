@@ -30,4 +30,6 @@ public enum Direction implements Serializable {
     SOUTH,
     EAST,
     WEST;
+
+    private static final long serialVersionUID = 10001;
 }
