@@ -18,15 +18,15 @@
 
 package multisnake;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  *
  * @author poodimoos
  */
 public class KeyboardPlayer extends Player implements KeyListener {
-    private int north, east, south, west;
+    transient private int north, east, south, west;
 
     public KeyboardPlayer() {
         super();

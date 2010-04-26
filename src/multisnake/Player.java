@@ -18,7 +18,7 @@
 
 package multisnake;
 
-import java.io.Serializable;
+import java.io.Externalizable;
 import java.io.ObjectOutput;
 import java.io.ObjectInput;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * @author poodimoos
  */
-public abstract class Player implements Tickable, Serializable {
+public abstract class Player implements Tickable, Externalizable {
     private Snake snake;
     transient private Game game;
 
@@ -108,4 +108,30 @@ public abstract class Player implements Tickable, Serializable {
     protected void quit() {
         game.removePlayer(this);
     }
+
+    // write in order snake, name, score, kills
+     public void writeExternal(ObjectOutput out) {
+         try {
+             out.writeObject(snake);
+             out.writeObject(name);
+             Integer scoreI = new Integer(score);
+             out.writeObject(scoreI);
+             Integer killsI = new Integer(kills);
+             out.write(killsI);
+             out.flush();
+         } catch(IOException ex) {
+             ex.printStackTrace();
+         }
+     }
+
+     public void readExternal(ObjectInput in) {
+         try {
+             snake = (Snake)(in.readObject());
+             name = (String)(in.readObject());
+             score = in.read();
+             kills = in.read();
+         } catch(Exception ex) {
+             ex.printStackTrace();
+         }
+     }
 }

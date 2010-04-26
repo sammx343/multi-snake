@@ -17,28 +17,77 @@ public class MultiSnake{
     public static final int BOARD_HEIGHT = 21;
 
     public static void main(String[] args) {
-        boolean clientMode = false;
+        int clientMode = -1;
         String host = "";
         int port = -1;
+        int tick = 75;
 
         for(String s : args) {
+            if(s.startsWith("--host")) {
+                clientMode = 0;
+            }
             if(s.startsWith("--server=")) {
-                clientMode = true;
+                clientMode = 1;
                 host = s.substring(9);
             }
             if(s.startsWith("--port=")) {
                 Integer portI = new Integer(s.substring(7));
                 port = portI.intValue();
             }
+            if(s.startsWith("--tick=")) {
+                Integer tickI = new Integer(s.substring(7));
+                tick = tickI.intValue();
+            }
         }
 
-        if(!clientMode)
-            serverRun();
-        else
+        if(clientMode == -1) {
+            String message = "Do you want to host the game "
+                    + "or connect to another?";
+            String[] options = {"Host", "Connect"};
+            int response = JOptionPane.showOptionDialog(null,
+                                                   message,
+                                                   "Choose Mode",
+                                                   JOptionPane.DEFAULT_OPTION,
+                                                   JOptionPane.QUESTION_MESSAGE,
+                                                   null,
+                                                   options,
+                                                   options[0]);
+            switch(response) {
+                case 1:
+                    clientMode = 1;
+                    break;
+                case 0:
+                default:
+                    clientMode = 0;
+                    break;
+            }
+        }
+
+        if(clientMode == 0)
+            serverRun(port, tick);
+        else if(clientMode == 1) {
             clientRun(host, port);
+        }
+        else
+            assert false;
     }
     
     public static void clientRun(String host, int port) {
+        if(host.equals(""))
+            host = JOptionPane.showInputDialog(null,
+                                               "Connect where?",
+                                               "Enter Host",
+                                               JOptionPane.QUESTION_MESSAGE);
+
+        if(port == -1) {
+            String portS = JOptionPane.showInputDialog(null,
+                                                  "On what port?",
+                                                  "Enter Port",
+                                                  JOptionPane.QUESTION_MESSAGE);
+            Integer portI = Integer.valueOf(portS);
+            port = portI.intValue();
+        }
+
         if((host.equals("")) || (port == -1)) {
             System.out.println("Must include host and port in client mode.");
             System.exit(1);
@@ -73,7 +122,16 @@ public class MultiSnake{
         clientGame.runGame(host, port);
     }
 
-    public static void serverRun() {
+    public static void serverRun(int port, int tick) {
+        if(port == -1) {
+            String portS = JOptionPane.showInputDialog(null,
+                                                  "Host on what port?",
+                                                  "Enter Port",
+                                                  JOptionPane.QUESTION_MESSAGE);
+            Integer portI = Integer.valueOf(portS);
+            port = portI.intValue();
+        }
+
         JFrame mainFrame = new JFrame("MultiSnake");
 
         KeyboardPlayer player1 = new KeyboardPlayer("Player 1",
@@ -113,7 +171,7 @@ public class MultiSnake{
         mainFrame.setVisible(true);
         bc.requestFocusInWindow();
 
-        Game game = new Game(players, bc, scoreBoard);
+        Game game = new Game(players, bc, scoreBoard, 75);
 
         game.runGame();
     }

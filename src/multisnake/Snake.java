@@ -19,32 +19,37 @@
 package multisnake;
 
 import java.util.*;
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.ObjectOutput;
+import java.io.ObjectInput;
+import java.io.IOException;
 
 /**
  *
  * @author poodimoos
  */
-public class Snake implements Tickable, Serializable {
+public class Snake implements Tickable, Externalizable {
     private static final int START_SEGMENTS = 6;
 
-    private LinkedList<Location> segments;
+    private List<Location> segments;
     private Direction dir, tempDir;
     private int age;
 
     // Initializes snake without setting up segments, call reset for that
     public Snake() {
-        segments = new LinkedList<Location>();
+        segments = Collections.synchronizedList(new LinkedList<Location>());
     }
 
     // move snake one spot
     public synchronized void tick() {
         dir = tempDir;
-        Location firstLoc = segments.getFirst();
+        Location firstLoc = segments.get(0);
         Location newLoc = firstLoc.getAdjacentLocation(dir);
 
-        segments.removeLast();
-        segments.addFirst(newLoc);
+        synchronized(segments) {
+            segments.remove(segments.size() - 1);
+            segments.add(0, newLoc);
+        }
 
         age++;
     }
@@ -71,6 +76,7 @@ public class Snake implements Tickable, Serializable {
         return tempDir;
     }
 
+    // return a shallow copy so caller can do what it wants
     public final List<Location> getLocations() {
         return new LinkedList<Location>(segments);
     }
@@ -88,7 +94,42 @@ public class Snake implements Tickable, Serializable {
     }
 
     public synchronized void appendSegment() {
-        Location last = segments.getLast();
-        segments.add(last);
+        synchronized(segments) {
+            Location last = segments.get(segments.size() - 1);
+            segments.add(last);
+        }
+    }
+
+    public void writeExternal(ObjectOutput out) {
+        try {
+            byte[] serialSnake = new byte[segments.size() * 2];
+            synchronized(segments) {
+                Iterator<Location> it = segments.iterator();
+                for(int i = 0; it.hasNext(); i++) {
+                    Location loc = it.next();
+                    serialSnake[2 * i] = (byte)(loc.x);
+                    serialSnake[2 * i + 1] = (byte)(loc.y);
+                }
+            }
+
+            out.write(segments.size());
+            out.write(serialSnake);
+            out.flush();
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+     }
+
+    public void readExternal(ObjectInput in) {
+        try {
+            int length = in.read();
+            for(int i = 0; i < length; i++) {
+                int x = in.read(), y = in.read();
+                Location loc = new Location(x, y);
+                segments.add(loc);
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -34,16 +34,18 @@ public class Game implements Tickable {
 
     private List<Pickup> pickups;
 
-    private static final int TICK_LENGTH = 25;
+    private int tickLength;
 
     public Game(List<Player> players,
                 BoardCanvas bc,
-                JTable scoreBoard) {
+                JTable scoreBoard,
+                int tickLength) {
         List<Player> tempPlayers = new ArrayList<Player>(players);
         this.players = Collections.synchronizedList(tempPlayers);
 
         this.bc = bc;
         this.scoreBoard = scoreBoard;
+        this.tickLength = tickLength;
 
         timer = new Timer();
         pickups = new LinkedList<Pickup>();
@@ -64,7 +66,7 @@ public class Game implements Tickable {
         makeNewFood();
 
         tickTask = new TickTask(this);
-        timer.scheduleAtFixedRate(tickTask, 0, TICK_LENGTH);
+        timer.scheduleAtFixedRate(tickTask, 0, tickLength);
     }
 
     public void tick() {
