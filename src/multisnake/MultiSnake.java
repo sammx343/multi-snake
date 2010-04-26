@@ -123,14 +123,14 @@ public class MultiSnake{
     }
 
     public static void serverRun(int port, int tick) {
-        if(port == -1) {
+        /*if(port == -1) {
             String portS = JOptionPane.showInputDialog(null,
                                                   "Host on what port?",
                                                   "Enter Port",
                                                   JOptionPane.QUESTION_MESSAGE);
             Integer portI = Integer.valueOf(portS);
             port = portI.intValue();
-        }
+        }*/
 
         JFrame mainFrame = new JFrame("MultiSnake");
 
@@ -139,13 +139,8 @@ public class MultiSnake{
                                                     KeyEvent.VK_RIGHT,
                                                     KeyEvent.VK_DOWN,
                                                     KeyEvent.VK_LEFT);
-        KeyboardPlayer player2 = new KeyboardPlayer("Player 2",
-                                                    KeyEvent.VK_W,
-                                                    KeyEvent.VK_D,
-                                                    KeyEvent.VK_S,
-                                                    KeyEvent.VK_A);
-        NetworkPlayer player3 = new NetworkPlayer("Player 3",
-                                                  10000);
+        NetworkPlayer player2 = new NetworkPlayer("Player 2", 10000);
+        NetworkPlayer player3 = new NetworkPlayer("Player 3", 10001);
         LinkedList<Player> players = new LinkedList<Player>();
         players.add(player1);
         players.add(player2);
