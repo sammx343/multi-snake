@@ -75,10 +75,6 @@ public class ClientGame implements Runnable, KeyListener {
                 List<Player> players = tp.getPlayers();
                 List<Pickup> pickups = tp.getPickups();
 
-                Snake snake = players.get(0).getSnake();
-                Location head = snake.getLocations().get(0);
-                //System.out.println("got a packet! " + head.x + " " + head.y);
-
                 bc.initForGame(players, pickups);
                 bc.repaint();
 
@@ -113,6 +109,7 @@ public class ClientGame implements Runnable, KeyListener {
         }
     }
 
+    // unused methods
     public void keyTyped(KeyEvent e) { }
     public void keyPressed(KeyEvent e) { }
 }

@@ -18,17 +18,24 @@
 
 package multisnake;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 /**
  *
  * @author Patrick Hulin
  */
-public class Location implements Serializable {
-    public final int x;
-    public final int y;
+public class Location implements Externalizable {
+    public int x;
+    public int y;
 
-    private static final long serialVersionUID = 8001;
+    private static final long serialVersionUID = 8002;
+
+    public Location() {
+        this(-1, -1);
+    }
 
     public Location(int x, int y) {
         this.x = x;
@@ -79,5 +86,15 @@ public class Location implements Serializable {
         int x = (int)(Math.random() * MultiSnake.BOARD_WIDTH);
         int y = (int)(Math.random() * MultiSnake.BOARD_HEIGHT);
         return new Location(x, y);
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.write(x);
+        out.write(y);
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        x = in.read();
+        y = in.read();
     }
 }

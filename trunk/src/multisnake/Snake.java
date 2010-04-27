@@ -31,7 +31,7 @@ import java.io.IOException;
 public class Snake implements Tickable, Externalizable {
     private static final int START_SEGMENTS = 6;
 
-    private List<Location> segments;
+    private final List<Location> segments;
     private Direction dir, tempDir;
     private int age;
 
@@ -80,7 +80,9 @@ public class Snake implements Tickable, Externalizable {
 
     // return a shallow copy so caller can do what it wants
     public final List<Location> getLocations() {
-        return new LinkedList<Location>(segments);
+        synchronized(segments) {
+            return new LinkedList<Location>(segments);
+        }
     }
 
     // if snake crashed into something or just to do initial construction
