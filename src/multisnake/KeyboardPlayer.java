@@ -23,7 +23,7 @@ import java.awt.event.KeyListener;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class KeyboardPlayer extends Player implements KeyListener {
     transient private int north, east, south, west;

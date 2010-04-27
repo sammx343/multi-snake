@@ -22,7 +22,7 @@ import javax.swing.JTable;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class ScoreBoardUpdate implements Runnable {
     JTable scoreBoard;

@@ -26,7 +26,7 @@ import java.io.IOException;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class Snake implements Tickable, Externalizable {
     private static final int START_SEGMENTS = 6;

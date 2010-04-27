@@ -22,7 +22,7 @@ import java.util.TimerTask;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class TickTask extends TimerTask {
     Tickable tickable;

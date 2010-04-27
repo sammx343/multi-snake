@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class NetworkPlayer extends Player implements Runnable {
     transient private ServerSocket serverSocket;

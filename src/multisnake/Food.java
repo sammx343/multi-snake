@@ -28,7 +28,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class Food extends Pickup {
     private static final long serialVersionUID = 6001;

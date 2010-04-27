@@ -25,7 +25,7 @@ import java.io.IOException;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public abstract class Player implements Tickable, Externalizable {
     private Snake snake;

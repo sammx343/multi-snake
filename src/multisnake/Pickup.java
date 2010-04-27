@@ -27,7 +27,7 @@ import java.io.IOException;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public abstract class Pickup implements Externalizable {
     private Location loc;

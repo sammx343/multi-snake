@@ -20,7 +20,7 @@ package multisnake;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public interface Tickable {
     public void tick();

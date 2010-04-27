@@ -31,7 +31,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class BoardCanvas extends Canvas {
     List<Player> players;
