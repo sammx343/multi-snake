@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class Location implements Serializable {
     public final int x;

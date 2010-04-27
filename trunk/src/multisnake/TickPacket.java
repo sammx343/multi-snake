@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 phulin10
+ *  Copyright (C) 2010 Patrick Hulin
  * 
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  *
- * @author phulin10
+ * @author Patrick Hulin
  */
 public class TickPacket implements Serializable {
     private List<Player> players;

@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
 
 /**
  *
- * @author poodimoos
+ * @author Patrick Hulin
  */
 public class Game implements Tickable {
     private List<Player> players;
