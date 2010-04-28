@@ -28,64 +28,45 @@ import javax.swing.*;
  * 
  * @author Patrick Hulin
  */
-public class MultiSnake{
+public class MultiSnake implements Runnable {
     public static final int BOARD_WIDTH = 21;
     public static final int BOARD_HEIGHT = 21;
 
-    public static void main(String[] args) {
-        int clientMode = -1;
+    public void run() {
+        boolean clientMode = false;
         String host = "";
         int port = -1;
         int tick = 75;
 
-        for(String s : args) {
-            if(s.startsWith("--host")) {
-                clientMode = 0;
-            }
-            if(s.startsWith("--server=")) {
-                clientMode = 1;
-                host = s.substring(9);
-            }
-            if(s.startsWith("--port=")) {
-                Integer portI = new Integer(s.substring(7));
-                port = portI.intValue();
-            }
-            if(s.startsWith("--tick=")) {
-                Integer tickI = new Integer(s.substring(7));
-                tick = tickI.intValue();
-            }
+        String message = "Do you want to host the game "
+                + "or connect to another?";
+        String[] options = {"Host", "Connect"};
+        int response = JOptionPane.showOptionDialog(null,
+                                               message,
+                                               "Choose Mode",
+                                               JOptionPane.DEFAULT_OPTION,
+                                               JOptionPane.QUESTION_MESSAGE,
+                                               null,
+                                               options,
+                                               options[0]);
+        switch(response) {
+            case 1:
+                clientMode = true;
+                break;
+            case 0:
+            default:
+                clientMode = false;
+                break;
         }
 
-        if(clientMode == -1) {
-            String message = "Do you want to host the game "
-                    + "or connect to another?";
-            String[] options = {"Host", "Connect"};
-            int response = JOptionPane.showOptionDialog(null,
-                                                   message,
-                                                   "Choose Mode",
-                                                   JOptionPane.DEFAULT_OPTION,
-                                                   JOptionPane.QUESTION_MESSAGE,
-                                                   null,
-                                                   options,
-                                                   options[0]);
-            switch(response) {
-                case 1:
-                    clientMode = 1;
-                    break;
-                case 0:
-                default:
-                    clientMode = 0;
-                    break;
-            }
-        }
-
-        if(clientMode == 0)
+        if(!clientMode)
             serverRun(port, tick);
-        else if(clientMode == 1) {
-            clientRun(host, port);
-        }
         else
-            assert false;
+            clientRun(host, port);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new MultiSnake());
     }
     
     public static void clientRun(String host, int port) {
@@ -150,11 +131,7 @@ public class MultiSnake{
 
         JFrame mainFrame = new JFrame("MultiSnake");
 
-        KeyboardPlayer player1 = new KeyboardPlayer("Player 1",
-                                                    KeyEvent.VK_UP,
-                                                    KeyEvent.VK_RIGHT,
-                                                    KeyEvent.VK_DOWN,
-                                                    KeyEvent.VK_LEFT);
+        KeyboardPlayer player1 = new KeyboardPlayer("Player 1");
         NetworkPlayer player2 = new NetworkPlayer("Player 2", 10000);
         //NetworkPlayer player3 = new NetworkPlayer("Player 3", 10001);
         LinkedList<Player> players = new LinkedList<Player>();
