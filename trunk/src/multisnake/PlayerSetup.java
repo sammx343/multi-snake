@@ -18,8 +18,11 @@
 
 package multisnake;
 
+import java.util.List;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 /**
@@ -27,5 +30,25 @@ import javax.swing.JButton;
  * @author Patrick Hulin
  */
 public class PlayerSetup extends JFrame {
+    private DefaultListModel listModel;
+    private JList list;
 
+    public PlayerSetup() {
+        listModel = new DefaultListModel();
+        list = new JList(listModel);
+
+        Player defaultPlayer = new KeyboardPlayer("Player 1");
+        listModel.addElement(defaultPlayer);
+    }
+
+    public List<Player> getPlayers() {
+        Player[] playerArray = (Player[])(listModel.toArray());
+        List<Player> players = new ArrayList<Player>(playerArray.length);
+
+        for(Player p : playerArray) {
+            players.add(p);
+        }
+
+        return players;
+    }
 }

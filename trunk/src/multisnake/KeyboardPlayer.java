@@ -31,12 +31,15 @@ public class KeyboardPlayer extends Player implements KeyListener {
     private static final long serialVersionUID = 4001;
 
     public KeyboardPlayer() {
-        super();
+        this("");
+    }
 
-        north = KeyEvent.VK_UP;
-        east = KeyEvent.VK_RIGHT;
-        south = KeyEvent.VK_DOWN;
-        west = KeyEvent.VK_LEFT;
+    public KeyboardPlayer(String name) {
+        this(name,
+             KeyEvent.VK_UP,
+             KeyEvent.VK_RIGHT,
+             KeyEvent.VK_DOWN,
+             KeyEvent.VK_LEFT);
     }
 
     public KeyboardPlayer(String name,
