@@ -72,7 +72,7 @@ public class GameSetup extends JFrame implements ActionListener {
         setLayout(layout);
 
         JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.setPreferredSize(new Dimension(100, 100));
+        scrollPane.setPreferredSize(new Dimension(200, 200));
 
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -127,7 +127,11 @@ public class GameSetup extends JFrame implements ActionListener {
                 System.out.println("keyboard");
             }
             else {
-                NetworkPlayer newPlayer = new NetworkPlayer("Player");
+                String newName = JOptionPane.showInputDialog(this,
+                                                             "Player's name:",
+                                                             "Player Name",
+                                                             JOptionPane.QUESTION_MESSAGE);
+                NetworkPlayer newPlayer = new NetworkPlayer(newName);
                 listModel.addElement(newPlayer);
             }
         }

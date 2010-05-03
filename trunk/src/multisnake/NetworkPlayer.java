@@ -72,6 +72,11 @@ public class NetworkPlayer extends Player implements Runnable {
     }
 
     @Override
+    public String toString() {
+        return super.toString() + " on " + port;
+    }
+
+    @Override
     public boolean isReady() {
         return (outputStream != null);
     }
@@ -157,5 +162,12 @@ public class NetworkPlayer extends Player implements Runnable {
         }
 
         unusedPorts.add(port);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        unusedPorts.add(port);
+
+        super.finalize();
     }
 }
