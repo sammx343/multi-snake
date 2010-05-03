@@ -23,7 +23,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -41,15 +44,25 @@ public class NetworkPlayer extends Player implements Runnable {
     transient private int port;
 
     private static final long serialVersionUID = 3001;
+    private static Set<Integer> unusedPorts;
+
+    static {
+        unusedPorts = new HashSet<Integer>();
+
+        for(int i = 10000; i < 10100; i++) {
+            unusedPorts.add(i);
+        }
+    }
 
     public NetworkPlayer() {
         super();
     }
 
-    public NetworkPlayer(String name, int port) {
+    public NetworkPlayer(String name) {
         super(name);
 
-        this.port = port;
+        port = Collections.min(unusedPorts);
+        unusedPorts.remove(port);
 
         try {
             serverSocket = new ServerSocket(port);
@@ -142,5 +155,7 @@ public class NetworkPlayer extends Player implements Runnable {
         } catch(IOException ex) {
             ex.printStackTrace();
         }
+
+        unusedPorts.add(port);
     }
 }
