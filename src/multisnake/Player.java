@@ -56,6 +56,11 @@ public abstract class Player implements Tickable, Externalizable {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+    
     public void tick() {
         snake.tick();
     }

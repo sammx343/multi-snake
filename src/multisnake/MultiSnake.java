@@ -129,38 +129,7 @@ public class MultiSnake implements Runnable {
             port = portI.intValue();
         }*/
 
-        JFrame mainFrame = new JFrame("MultiSnake");
-
-        KeyboardPlayer player1 = new KeyboardPlayer("Player 1");
-        NetworkPlayer player2 = new NetworkPlayer("Player 2", 10000);
-        //NetworkPlayer player3 = new NetworkPlayer("Player 3", 10001);
-        LinkedList<Player> players = new LinkedList<Player>();
-        players.add(player1);
-        players.add(player2);
-        //players.add(player3);
-
-        BoardCanvas bc = new BoardCanvas();
-
-        JTable scoreBoard = new JTable(new ScoreBoardModel(players));
-        scoreBoard.setFocusable(false);
-
-        mainFrame.setLayout(new FlowLayout());
-        mainFrame.add(bc);
-
-        Container container = new Container();
-        container.setLayout(new BorderLayout());
-        container.add(scoreBoard.getTableHeader(), BorderLayout.PAGE_START);
-        container.add(scoreBoard, BorderLayout.CENTER);
-        mainFrame.add(container);
-
-        mainFrame.pack();
-        mainFrame.setResizable(false);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setVisible(true);
-        bc.requestFocusInWindow();
-
-        Game game = new Game(players, bc, scoreBoard, 75);
-
-        game.runGame();
+        GameSetup gameSetup = new GameSetup();
+        gameSetup.setVisible(true);
     }
 }
