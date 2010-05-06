@@ -24,39 +24,45 @@ import java.awt.event.ActionListener;
 import java.awt.Container;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.util.Enumeration;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout;
 import javax.swing.SwingConstants;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
 
 /**
  *
  * @author Patrick Hulin
  */
-public class GameSetup extends JFrame implements ActionListener {
-    private DefaultListModel listModel;
-    private JList list;
+public class GameSetup extends JFrame implements ActionListener, TableModelListener {
+    private PlayerTableModel tableModel;
+    private JTable table;
 
     public GameSetup() {
         super("Game Setup");
 
-        listModel = new DefaultListModel();
-        list = new JList(listModel);
+        ArrayList<Player> players = new ArrayList<Player>();
+        players.add(new KeyboardPlayer("Player 1"));
+        players.add(new NetworkPlayer("Player 2"));
 
-        Player defaultPlayer = new KeyboardPlayer("Player 1");
-        listModel.addElement(defaultPlayer);
+        tableModel = new PlayerTableModel(players);
+        table = new JTable(tableModel);
+        table.setShowGrid(false);
+        table.setDragEnabled(false);
+        table.setColumnSelectionAllowed(false);
+        tableModel.addTableModelListener(this);
+
+        TableColumn playerColumn = table.getColumn("Name");
+        playerColumn.setCellRenderer(new PlayerCellRenderer());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
 
         JButton addButton = new JButton("Add");
         JButton removeButton = new JButton("Remove");
@@ -71,7 +77,7 @@ public class GameSetup extends JFrame implements ActionListener {
         GroupLayout layout = new GroupLayout(getContentPane());
         setLayout(layout);
 
-        JScrollPane scrollPane = new JScrollPane(list);
+        JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(200, 200));
 
         layout.setAutoCreateGaps(true);
@@ -98,77 +104,77 @@ public class GameSetup extends JFrame implements ActionListener {
         pack();
     }
 
-    public List<Player> getPlayers() {
-        Enumeration playersEnum = listModel.elements();
-        List<Player> players = new LinkedList<Player>();
+    private List<Player> getPlayers() {
+        return tableModel.getPlayers();
+    }
 
-        while(playersEnum.hasMoreElements()) {
-            players.add((Player)(playersEnum.nextElement()));
-        }
+    public String nextName() {
+        return "Player " + (tableModel.getRowCount() + 1);
+    }
 
-        return players;
+    public void addPlayer(Player player) {
+        tableModel.addPlayer(player);
     }
 
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         if(command.equals("add")) {
-            int response;
-            String[] options = {"Keyboard", "Network"};
-            response = JOptionPane.showOptionDialog(this,
-                                                    "Keyboard Player or Network Player?",
-                                                    "Player Type",
-                                                    JOptionPane.DEFAULT_OPTION,
-                                                    JOptionPane.QUESTION_MESSAGE,
-                                                    null,
-                                                    options,
-                                                    options[1]);
+            if(Player.colorsLeft() > 0) {
+                int response;
+                String[] options = {"Keyboard", "Network"};
+                response = JOptionPane.showOptionDialog(this,
+                        "Keyboard Player or Network Player?",
+                        "Player Type",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
 
-            if(options[response].equals("Keyboard")) {
-                System.out.println("keyboard");
+                if (options[response].equals("Keyboard")) {
+                    KPSetup kpSetup = new KPSetup(this, true);
+                    kpSetup.setVisible(true);
+                } else {
+                    NetworkPlayer newPlayer = new NetworkPlayer(nextName());
+                    tableModel.addPlayer(newPlayer);
+                }
             }
             else {
-                String newName = JOptionPane.showInputDialog(this,
-                                                             "Player's name:",
-                                                             "Player Name",
-                                                             JOptionPane.QUESTION_MESSAGE);
-                NetworkPlayer newPlayer = new NetworkPlayer(newName);
-                listModel.addElement(newPlayer);
+                JOptionPane.showMessageDialog(this, "Too many players already.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         else if(command.equals("remove")) {
-            int[] indices = list.getSelectedIndices();
+            int[] indices = table.getSelectedRows();
 
             for(int i = indices.length - 1; i >= 0; i--) {
-                listModel.remove(indices[i]);
+                Player p = tableModel.getPlayer(indices[i]);
+                p.dispose();
+                tableModel.removePlayer(indices[i]);
             }
         }
         else if(command.equals("done")) {
             List<Player> players = getPlayers();
 
             BoardCanvas bc = new BoardCanvas();
-
             JTable scoreBoard = new JTable(new ScoreBoardModel(players));
-            scoreBoard.setFocusable(false);
 
-            JFrame mainFrame = new JFrame("MultiSnake");
-            mainFrame.setLayout(new FlowLayout());
-            mainFrame.add(bc);
-
-            Container container = new Container();
-            container.setLayout(new BorderLayout());
-            container.add(scoreBoard.getTableHeader(), BorderLayout.PAGE_START);
-            container.add(scoreBoard, BorderLayout.CENTER);
-            mainFrame.add(container);
-
-            mainFrame.pack();
-            mainFrame.setResizable(false);
-            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            mainFrame.setVisible(true);
-            bc.requestFocusInWindow();
+            MultiSnake.setUpFrame(bc, scoreBoard);
+            setVisible(false);
 
             Game game = new Game(players, bc, scoreBoard, 75);
 
+            dispose();
             game.runGame();
         }
+    }
+
+    public void tableChanged(TableModelEvent e) {
+        table.repaint();
+    }
+
+    public void dispose() {
+        tableModel = null;
+        table = null;
     }
 }

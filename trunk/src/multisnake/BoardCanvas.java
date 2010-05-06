@@ -38,7 +38,6 @@ public class BoardCanvas extends Canvas {
     List<Pickup> pickups;
 
     private static final int SCALING = 25;
-    private static final Color[] snakeColors = {Color.RED, Color.BLUE, Color.GREEN};
 
     public BoardCanvas() {
         players = new LinkedList<Player>();
@@ -73,10 +72,8 @@ public class BoardCanvas extends Canvas {
         g.drawRect(0, 0, img.getWidth(null) - 1, img.getHeight(null) - 1);
 
         // draw everyone's snakes
-        Iterator<Player> it = players.iterator();
-        for(int i = 0; it.hasNext(); i++) {
-            Player p = it.next();
-            drawSnake(g, p.getSnake(), snakeColors[i]);
+        for(Player p : players) {
+            drawSnake(g, p.getSnake(), p.getColor());
         }
 
         // draw all the pickups

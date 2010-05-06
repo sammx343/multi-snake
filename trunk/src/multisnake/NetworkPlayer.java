@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -71,9 +73,8 @@ public class NetworkPlayer extends Player implements Runnable {
         }
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + " on " + port;
+    public int getPort() {
+        return port;
     }
 
     @Override
@@ -169,5 +170,17 @@ public class NetworkPlayer extends Player implements Runnable {
         unusedPorts.add(port);
 
         super.finalize();
+    }
+
+    @Override
+    public void dispose() {
+        unusedPorts.add(port);
+        try {
+            serverSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkPlayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        super.dispose();
     }
 }
