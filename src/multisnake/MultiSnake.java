@@ -18,21 +18,36 @@
 
 package multisnake;
 
-import java.util.LinkedList;
-import java.awt.event.KeyEvent;
-import java.awt.*;
-import javax.swing.*;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.TableColumn;
+import org.jdesktop.application.Application;
 
 /**
  * Main class of MultiSnake
  * 
  * @author Patrick Hulin
  */
-public class MultiSnake implements Runnable {
+public class MultiSnake extends Application {
     public static final int BOARD_WIDTH = 21;
     public static final int BOARD_HEIGHT = 21;
 
-    public void run() {
+    public static void main(String[] args) {
+        Application.launch(MultiSnake.class, args);
+    }
+
+    public static MultiSnake getApplication() {
+       return Application.getInstance(MultiSnake.class);
+    }
+
+    @Override
+    protected void startup() {
         boolean clientMode = false;
         String host = "";
         int port = -1;
@@ -65,10 +80,6 @@ public class MultiSnake implements Runnable {
             clientRun(host, port);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new MultiSnake());
-    }
-    
     public static void clientRun(String host, int port) {
         if(host.equals(""))
             host = JOptionPane.showInputDialog(null,
@@ -92,13 +103,32 @@ public class MultiSnake implements Runnable {
 
         System.out.println("connecting to " + host + " at port " + port);
 
-        JFrame mainFrame = new JFrame("MultiSnake");
-
         BoardCanvas bc = new BoardCanvas();
-
         JTable scoreBoard = new JTable(new ScoreBoardModel());
-        scoreBoard.setFocusable(false);
 
+        setUpFrame(bc, scoreBoard);
+
+        ClientGame clientGame = new ClientGame(bc, scoreBoard);
+
+        clientGame.runGame(host, port);
+    }
+
+    public static void serverRun(int port, int tick) {
+        GameSetup gameSetup = new GameSetup();
+        gameSetup.setVisible(true);
+    }
+
+    public static JFrame setUpFrame(BoardCanvas bc, JTable scoreBoard) {
+        scoreBoard.setFocusable(false);
+        scoreBoard.setCellSelectionEnabled(false);
+        scoreBoard.setColumnSelectionAllowed(false);
+        scoreBoard.setEnabled(false);
+        scoreBoard.setDragEnabled(false);
+
+        TableColumn playerColumn = scoreBoard.getColumn("Player");
+        playerColumn.setCellRenderer(new PlayerCellRenderer());
+
+        JFrame mainFrame = new JFrame("MultiSnake");
         mainFrame.setLayout(new FlowLayout());
         mainFrame.add(bc);
 
@@ -114,22 +144,6 @@ public class MultiSnake implements Runnable {
         mainFrame.setVisible(true);
         bc.requestFocusInWindow();
 
-        ClientGame clientGame = new ClientGame(bc, scoreBoard);
-
-        clientGame.runGame(host, port);
-    }
-
-    public static void serverRun(int port, int tick) {
-        /*if(port == -1) {
-            String portS = JOptionPane.showInputDialog(null,
-                                                  "Host on what port?",
-                                                  "Enter Port",
-                                                  JOptionPane.QUESTION_MESSAGE);
-            Integer portI = Integer.valueOf(portS);
-            port = portI.intValue();
-        }*/
-
-        GameSetup gameSetup = new GameSetup();
-        gameSetup.setVisible(true);
+        return mainFrame;
     }
 }

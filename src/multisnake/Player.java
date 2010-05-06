@@ -18,10 +18,15 @@
 
 package multisnake;
 
+import java.awt.Color;
 import java.io.Externalizable;
 import java.io.ObjectOutput;
 import java.io.ObjectInput;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  *
@@ -35,15 +40,59 @@ public abstract class Player implements Tickable, Externalizable {
     private int kills;
 
     private String name;
+    private Color color;
+
+    private static final Color[] colorArray = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW};
+    private static final Set<Color> colorSet;
 
     private static final long serialVersionUID = 1001;
 
+    static {
+        colorSet = Collections.synchronizedSet(new LinkedHashSet<Color>());
+        for(Color c : colorArray) {
+            colorSet.add(c.darker());
+        }
+    }
+
     public Player() {
         name = "";
+        color = Color.BLACK;
     }
 
     public Player(String name) {
         this.name = name;
+
+        synchronized(colorSet) {
+            Iterator<Color> it = colorSet.iterator();
+            color = it.next();
+            it = null;
+            colorSet.remove(color);
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        synchronized(colorSet) {
+            colorSet.add(color);
+        }
+
+        super.finalize();
+    }
+
+    // returns color to pool
+    public void dispose() {
+        synchronized(colorSet) {
+            colorSet.add(color);
+        }
+    }
+
+    public static int colorsLeft() {
+        return colorSet.size();
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
     public void beginGame(Game game) {
@@ -55,10 +104,13 @@ public abstract class Player implements Tickable, Externalizable {
     public String getName() {
         return name;
     }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    @Override
-    public String toString() {
-        return getName();
+    public Color getColor() {
+        return color;
     }
     
     public void tick() {
@@ -121,6 +173,7 @@ public abstract class Player implements Tickable, Externalizable {
          try {
              out.writeObject(snake);
              out.writeObject(name);
+             out.writeObject(color);
              Integer scoreI = new Integer(score);
              out.writeObject(scoreI);
              Integer killsI = new Integer(kills);
@@ -135,6 +188,7 @@ public abstract class Player implements Tickable, Externalizable {
          try {
              snake = (Snake)(in.readObject());
              name = (String)(in.readObject());
+             color = (Color)(in.readObject());
              Integer scoreI = (Integer)(in.readObject());
              score = scoreI.intValue();
              Integer killsI = (Integer)(in.readObject());

@@ -43,7 +43,7 @@ public class ScoreBoardModel extends AbstractTableModel {
         Player p = players.get(row);
 
         if(col == 0) {
-            return p.getName();
+            return p;
         }
         else if(col == 1) {
             return String.valueOf(p.getScore());
@@ -69,6 +69,7 @@ public class ScoreBoardModel extends AbstractTableModel {
         return getValueAt(0, col).getClass();
     }
 
+    @Override
     public String getColumnName(int col) {
         return COLUMN_NAMES[col];
     }
