@@ -81,6 +81,13 @@ public class BoardCanvas extends Canvas {
             drawPickup(g, pu);
         }
 
+        if(winner() != null) {
+            g.setColor(new Color(0.0f, 0.0f, 0.0f, 0.8f));
+            g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
+            g.setColor(Color.WHITE);
+            g.drawChars("Game Over".toCharArray(), 0, 9, 20, 20);
+        }
+
         gf.drawImage(img, 0, 0, null);
     }
 
@@ -126,5 +133,15 @@ public class BoardCanvas extends Canvas {
         g.drawImage(pickup.getImage(SCALING),
                     SCALING * loc.x, SCALING * loc.y,
                     null);
+    }
+
+    public Player winner() {
+        for(Player p : players) {
+            if(p.getScore() >= 1000) {
+                return p;
+            }
+        }
+
+        return null;
     }
 }
