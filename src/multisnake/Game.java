@@ -72,19 +72,23 @@ public class Game implements Tickable {
 
     public void tick() {
         synchronized(players) {
+            boolean gameOver = (bc.winner() != null);
+            
             for(Player p : players) {
-            if (!(p.isReady()))
-                return;
+                if (!(p.isReady()))
+                    return;
             }
 
-            for(Player p : players) {
-                p.tick();
-            }
+            if(!gameOver) {
+                for(Player p : players) {
+                    p.tick();
+                }
 
-            checkCollisions();
+                checkCollisions();
 
-            for(Player p : players) {
-                p.afterTick();
+                for(Player p : players) {
+                    p.afterTick();
+                }
             }
 
             bc.repaint();

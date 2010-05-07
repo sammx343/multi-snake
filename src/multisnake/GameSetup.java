@@ -21,9 +21,6 @@ package multisnake;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.awt.Container;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -173,6 +170,7 @@ public class GameSetup extends JFrame implements ActionListener, TableModelListe
         table.repaint();
     }
 
+    @Override
     public void dispose() {
         tableModel = null;
         table = null;
