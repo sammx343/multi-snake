@@ -45,7 +45,7 @@ public abstract class Player implements Tickable, Externalizable {
     private static final Color[] colorArray = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW};
     private static final Set<Color> colorSet;
 
-    private static final long serialVersionUID = 1001;
+    private static final long serialVersionUID = 1002;
 
     static {
         colorSet = Collections.synchronizedSet(new LinkedHashSet<Color>());

@@ -79,20 +79,23 @@ public class TickPacket implements Externalizable {
     public void readExternal(ObjectInput in) {
         players = Collections.synchronizedList(new LinkedList<Player>());
         pickups = Collections.synchronizedList(new LinkedList<Pickup>());
+
+        int i = -1;
         try {
             synchronized(players) {
-                for(int i = in.read(); i > 0; i--) {
+                for(i = in.read(); i > 0; i--) {
                     players.add((Player)(in.readObject()));
                 }
             }
 
             synchronized(pickups) {
-                for(int i = in.read(); i > 0; i--) {
+                for(i = in.read(); i > 0; i--) {
                     pickups.add((Pickup)(in.readObject()));
                 }
             }
         } catch(Exception ex) {
             ex.printStackTrace();
+            System.out.println(i);
         }
     }
 }
