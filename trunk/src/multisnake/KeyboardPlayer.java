@@ -29,10 +29,16 @@ import java.awt.event.KeyListener;
 public class KeyboardPlayer extends Player implements KeyListener {
     transient private int north, east, south, west;
 
-    private static final long serialVersionUID = 4001;
+    private static final long serialVersionUID = 4002;
 
+    // for externalization, only trivial initialization
     public KeyboardPlayer() {
-        this("");
+        super();
+
+        this.north = 0;
+        this.east = 0;
+        this.south = 0;
+        this.west = 0;
     }
 
     public KeyboardPlayer(String name) {
