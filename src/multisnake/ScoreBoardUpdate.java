@@ -19,6 +19,7 @@
 package multisnake;
 
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -35,6 +36,10 @@ public class ScoreBoardUpdate implements Runnable {
 
     public void run() {
         scoreBoard.setModel(sbm);
+
+        TableColumn playerColumn = scoreBoard.getColumn("Player");
+        playerColumn.setCellRenderer(new PlayerCellRenderer());
+        
         scoreBoard.repaint();
     }
 }

@@ -45,7 +45,7 @@ public abstract class Player implements Tickable, Externalizable {
     private static final Color[] colorArray = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.CYAN, Color.YELLOW};
     private static final Set<Color> colorSet;
 
-    private static final long serialVersionUID = 1002;
+    private static final long serialVersionUID = 1003;
 
     static {
         colorSet = Collections.synchronizedSet(new LinkedHashSet<Color>());
@@ -162,6 +162,13 @@ public abstract class Player implements Tickable, Externalizable {
         score += 30;
     }
 
+    public void newGame() {
+        kills = 0;
+        score = 0;
+
+        snake.reset(game.randomValidLocation());
+    }
+
     // if for some reason the player needs to be dropped from the game
     // exists so can be overridden to perform final cleanup tasks if necessary
     protected void quit() {
@@ -173,7 +180,7 @@ public abstract class Player implements Tickable, Externalizable {
          try {
              out.writeObject(snake);
              out.writeObject(name);
-             out.writeObject(color);
+             out.writeInt(color.getRGB());
              Integer scoreI = new Integer(score);
              out.writeObject(scoreI);
              Integer killsI = new Integer(kills);
@@ -188,7 +195,7 @@ public abstract class Player implements Tickable, Externalizable {
          try {
              snake = (Snake)(in.readObject());
              name = (String)(in.readObject());
-             color = (Color)(in.readObject());
+             color = new Color(in.readInt());
              Integer scoreI = (Integer)(in.readObject());
              score = scoreI.intValue();
              Integer killsI = (Integer)(in.readObject());

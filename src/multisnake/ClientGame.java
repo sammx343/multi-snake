@@ -27,6 +27,7 @@ import java.io.ObjectInputStream;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 
 /**
  *
@@ -72,8 +73,8 @@ public class ClientGame implements Runnable, KeyListener {
             try {
                 tp = (TickPacket)(inputStream.readObject());
 
-                List<Player> players = tp.getPlayers();
-                List<Pickup> pickups = tp.getPickups();
+                List<Player> players = Arrays.asList(tp.getPlayers());
+                List<Pickup> pickups = Arrays.asList(tp.getPickups());
 
                 bc.initForGame(players, pickups);
                 bc.repaint();
