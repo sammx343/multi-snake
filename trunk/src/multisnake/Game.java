@@ -18,7 +18,16 @@
 
 package multisnake;
 
-import java.util.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Timer;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
@@ -26,14 +35,14 @@ import javax.swing.SwingUtilities;
  *
  * @author Patrick Hulin
  */
-public class Game implements Tickable {
-    private List<Player> players;
+public class Game implements Tickable, MouseListener {
+    private final List<Player> players;
     private BoardCanvas bc;
     private JTable scoreBoard;
     private Timer timer;
     private TickTask tickTask;
 
-    private List<Pickup> pickups;
+    private final List<Pickup> pickups;
 
     private int tickLength;
 
@@ -49,7 +58,7 @@ public class Game implements Tickable {
         this.tickLength = tickLength;
 
         timer = new Timer();
-        pickups = new LinkedList<Pickup>();
+        pickups = Collections.synchronizedList(new LinkedList<Pickup>());
     }
 
     public void runGame() {
@@ -61,6 +70,8 @@ public class Game implements Tickable {
             p.beginGame(this);
             }
         }
+
+        bc.addMouseListener(this);
 
         bc.initForGame(players, pickups);
 
@@ -156,8 +167,10 @@ public class Game implements Tickable {
     }
 
     public void makeNewFood() {
-        Food food = new Food(randomValidLocation(), pickups);
-        food.placeOnBoard();
+        synchronized(pickups) {
+            Food food = new Food(randomValidLocation(), pickups);
+            food.placeOnBoard();
+        }
     }
 
     public boolean isOccupied(Location loc) {
@@ -207,10 +220,42 @@ public class Game implements Tickable {
     }
 
     public synchronized void removePlayer(Player player) {
-        players.remove(player);
+        synchronized(players) {
+            players.remove(player);
+        }
+
         ScoreBoardModel sbm = new ScoreBoardModel(players);
         ScoreBoardUpdate sbu = new ScoreBoardUpdate(scoreBoard, sbm);
         SwingUtilities.invokeLater(sbu);
         bc.repaint();
     }
+
+    public void newGame() {
+        synchronized(players) {
+            for(Player p : players) {
+                p.newGame();
+            }
+        }
+
+        synchronized(pickups) {
+            pickups.clear();
+        }
+
+        makeNewFood();
+        
+        bc.repaint();
+        scoreBoard.repaint();
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        if(bc.winner() != null) {
+            newGame();
+        }
+    }
+
+    // unused methods
+    public void mouseClicked(MouseEvent e) { }
+    public void mousePressed(MouseEvent e) { }
+    public void mouseEntered(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { }
 }

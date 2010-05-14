@@ -31,40 +31,40 @@ import java.util.Collections;
  * @author Patrick Hulin
  */
 public class TickPacket implements Externalizable {
-    private List<Player> players;
-    private List<Pickup> pickups;
+    private Player[] players;
+    private Pickup[] pickups;
 
-    private static final long serialVersionUID = 9004;
+    private static final long serialVersionUID = 9005;
 
     public TickPacket() {
         players = null;
         pickups = null;
     }
 
-    public TickPacket(List<Player> players, List<Pickup> pickups) {
+    public TickPacket(Player[] players, Pickup[] pickups) {
         this.players = players;
         this.pickups = pickups;
     }
 
-    public List<Player> getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
 
-    public List<Pickup> getPickups() {
+    public Pickup[] getPickups() {
         return pickups;
     }
 
     public void writeExternal(ObjectOutput out) {
         try {
             synchronized(players) {
-                out.write(players.size());
+                out.write(players.length);
                 for(Player p : players) {
                     out.writeObject(p);
                 }
             }
 
             synchronized(pickups) {
-                out.write(pickups.size());
+                out.write(pickups.length);
                 for(Pickup pu : pickups) {
                     out.writeObject(pu);
                 }
@@ -77,20 +77,21 @@ public class TickPacket implements Externalizable {
     }
 
     public void readExternal(ObjectInput in) {
-        players = Collections.synchronizedList(new LinkedList<Player>());
-        pickups = Collections.synchronizedList(new LinkedList<Pickup>());
-
         int i = -1;
         try {
+            int numPlayers = in.read();
+            players = new Player[numPlayers];
             synchronized(players) {
-                for(i = in.read(); i > 0; i--) {
-                    players.add((Player)(in.readObject()));
+                for(i = 0; i < numPlayers; i++) {
+                    players[i] = (Player)(in.readObject());
                 }
             }
 
+            int numPickups = in.read();
+            pickups = new Pickup[numPickups];
             synchronized(pickups) {
-                for(i = in.read(); i > 0; i--) {
-                    pickups.add((Pickup)(in.readObject()));
+                for(i = 0; i < numPickups; i++) {
+                    pickups[i] = (Pickup)(in.readObject());
                 }
             }
         } catch(Exception ex) {

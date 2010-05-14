@@ -27,8 +27,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -110,12 +108,10 @@ public class NetworkPlayer extends Player implements Runnable {
         Game game = getGame();
         List<Player> players = game.getPlayers();
         List<Pickup> pickups = game.getPickups();
+        Player[] playerArray = players.toArray(new Player[0]);
+        Pickup[] pickupArray = pickups.toArray(new Pickup[0]);
 
-        TickPacket tp = new TickPacket(players, pickups);
-
-        Snake snake = tp.getPlayers().get(0).getSnake();
-        Location head = snake.getLocations().get(0);
-        //System.out.println("sent a packet! " + head.x + " " + head.y);
+        TickPacket tp = new TickPacket(playerArray, pickupArray);
 
         try {
             outputStream.reset();
@@ -178,7 +174,7 @@ public class NetworkPlayer extends Player implements Runnable {
         try {
             serverSocket.close();
         } catch (IOException ex) {
-            Logger.getLogger(NetworkPlayer.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
 
         super.dispose();
