@@ -20,14 +20,19 @@ package multisnake;
 
 import java.awt.Color;
 import java.awt.Canvas;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
+import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -81,11 +86,24 @@ public class BoardCanvas extends Canvas {
             drawPickup(g, pu);
         }
 
-        if(winner() != null) {
+        Player winner = winner();
+        if(winner != null) {
             g.setColor(new Color(0.0f, 0.0f, 0.0f, 0.8f));
             g.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
+
+            Font font = new Font(Font.SANS_SERIF, Font.BOLD, 18);
+            g.setFont(font);
             g.setColor(Color.WHITE);
-            g.drawChars("Game Over".toCharArray(), 0, 9, 20, 20);
+            FontRenderContext frc = new FontRenderContext(null, true, false);
+
+            String resultsString = "Game Over - " + winner.getName() + " wins!";
+            String newString = "Host can click the board for a new game.";
+            Rectangle2D bounds1 = font.getStringBounds(resultsString, frc);
+            Rectangle2D bounds2 = font.getStringBounds(newString, frc);
+            g.drawString(resultsString, (int)((width - bounds1.getWidth()) / 2),
+                    (int)((height - bounds1.getHeight() - bounds2.getHeight()) / 2));
+            g.drawString(newString, (int)((width - bounds2.getWidth()) / 2),
+                    (int)((height + bounds1.getHeight() - bounds2.getHeight()) / 2));
         }
 
         gf.drawImage(img, 0, 0, null);
